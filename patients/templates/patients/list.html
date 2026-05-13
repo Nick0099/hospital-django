@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Patients list</title>
+</head>
+<body>
+    <h1>Patient List</h1>
+ {% if patients%}
+    <ul>
+    {% for patient in patients %}
+        <li>{{ patient.name }}, {{ patient.dob }}, {{ patient.blood_type }}</li>
+    {% endfor %}
+    </ul>
+ {% else %}
+    <p>No patients available.</p>
+ {% endif %}
+</body>
+</html>
