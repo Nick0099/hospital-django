@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. {{ doctor.name }}</title>
+</head>
+<body>
+    <h1>Dr. {{ doctor.name }}</h1>
+    <p><strong>Specialty:</strong> {{ doctor.specialty.name }}</p>
+    <p><strong>Shift:</strong> {{ doctor.get_shift_display }}</p>  
+    <p><strong>License:</strong> {{ doctor.license_number }}</p>
+    <p><strong>Phone:</strong> {{ doctor.phone }}</p>
+
+    <h3>Qualifications</h3>
+    {% for q in doctor.qualifications.all %}
+        <span>{{ q.name }}</span>
+    {% endfor %}
+    
+    <h3>Can Prescribe</h3>
+    {% for med in doctor.can_prescribe.all %}
+        <span>{{ med.name }}</span>
+    {% endfor %}
+    
+    <br><br>
+    <a href="/doctors/">Back to Doctors List</a>
+</body>
+</html>
