@@ -4,9 +4,8 @@ from patients import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('patients/', views.patient_list, name='patient_list'),
-    path('appointments/book/', views.appointment_list, name='book_appointment'),
-    path('appointments/success/', views.appointment_success, name='appointment_success'),
-    path('doctors/', views.doctors_list, name='doctors_list'),
+    path('patients/', views.patient_list),
+    path('doctors/', include('doctors.urls')),
     path('staff/', include('staff.urls')),
+    path('appointments/', include('appointments.urls')),
 ]

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments</title>
+</head>
+<body>
+    <h1>Appointments</h1>
+    <a href="/appointments/book/"> Book New</a>
+    <br><br>
+    {% for apt in appointments %}
+        <div>
+            <strong>{{ apt.patients }}</strong> = Dr.{{ apt.doctor }} <br>
+            Date: {{ apt.date }} Time: {{ apt.time }} <br>
+            Status: {{ apt.status }} <br>
+            Reason: {{ apt.reason }} <br>
+            {% if apt.status == 'scheduled' %}
+                <a href="/appointments/{{ apt.pk }}/cancel/"> Cancel</a>
+            {% endif %}
+        </div>
+        <hr>
+    {% empty %}
+        <p>No appointments found.</p>
+    {% endfor %}
+</body>
+</html>

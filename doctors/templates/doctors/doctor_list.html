@@ -14,5 +14,7 @@
             <p> Shift :{{ doctor.get_shift_display }}</p>
         </div>
     {% empty %}
+        <p>No doctors available.</p>
+    {% endfor %}
 </body>
 </html>
