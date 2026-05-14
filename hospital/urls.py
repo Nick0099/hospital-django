@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from patients import views
 
 urlpatterns = [
@@ -8,4 +8,5 @@ urlpatterns = [
     path('appointments/book/', views.appointment_list, name='book_appointment'),
     path('appointments/success/', views.appointment_success, name='appointment_success'),
     path('doctors/', views.doctors_list, name='doctors_list'),
+    path('staff/', include('staff.urls')),
 ]

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ member.name}}</title>
+</head>
+<body>
+    <h1>{{member.name}}</h1>
+    <p><strong>Role:</strong> {{ member.get_role_display }}</p>
+    <p><strong>Department:</strong> {{ member.department }}</p>
+    <p><strong>Shift:</strong> {{ member.get_shift_display }}</p>
+    <p><strong>Phone:</strong> {{ member.phone }}</p>
+    <p><strong>Email:</strong> {{ member.email }}</p>
+    <p><strong>Joined:</strong> {{ member.joined_date }}</p>
+    <br>
+    <a href="/staff/">Back to staff</a>
+</body>
+</html>
