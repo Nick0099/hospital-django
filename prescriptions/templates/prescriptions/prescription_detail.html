@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Detail</title>
+</head>
+<body>
+    <h1>{{ prescription.medications }}</h1>
+    <p><strong>Patient:</strong> {{ prescription.patient }}</p>
+    <p><strong>Doctor:</strong> {{ prescription.doctor }}</p>
+    <p><strong>Dosage:</strong> {{ prescription.dosage }}</p>
+    <p><strong>Frequency:</strong> {{ prescription.get_frequency_display }}</p>
+    <p><strong>From:</strong> {{ prescription.start_date }} - {{ prescription.end_date }}</p>
+    <p><strong>Instructions:</strong> {{ prescription.instructions }}</p>
+    <p><strong>Status:</strong> {% if prescription.is_active %}Active {% else %}Inactive{% endif %}</p>
+    <br>
+    <a href="/prescriptions/">Back to List</a> 
+</body>
+</html>

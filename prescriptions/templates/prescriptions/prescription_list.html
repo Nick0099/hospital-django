@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescriptions</title>
+</head>
+<body>
+    <h1>Active Prescriptions</h1>
+    <a href="{% url 'add_prescription' %}">+ New Prescriptions</a>
+    <br><br>
+    {% for p in prescriptions %}
+       <div>
+            <h3><a href="{% url 'prescription_detail' p.pk %}">{{ p.medications }}</a></h3>
+            <p>Patient: {{ p.patient }}</p>
+            <p>Doctor: Dr. {{ p.doctor }}</p>
+            <p>Dosage: {{ p.dosage }} - {{ p.get_frequency_display }}</p>
+            <p>{{ p.start_date }} to {{ p.end_date}}</p> 
+            <a href="{% url 'deactivate_prescription' p.pk %}">Mark as Inactive</a>
+        </div>
+        <hr>
+        {% empty %}
+        <p>No active prescriptions found.</p>
+    {% endfor %}
+</body>
+</html>
