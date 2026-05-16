@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+</head>
+<body>
+    <h1>Inventory</h1>
+    <a href="/inventory/add/">Add Item</a>
+
+    {% if low_stock %}
+        <div style="background-color: #fff3cd; padding: 10px; margin: 10px 0;">
+            <strong>Low Stock Alert:</strong>
+            <ul>
+                {% for item in low_stock %}
+                    <li>{{ item.name }} ({{ item.quantity }} left)</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    <br>
+    <table border="1" cellpading="8">
+          
+        <tr>
+            <th>Name</th><th>Category</th><th>Quantity</th>
+            <th>Reorder Level</th><th>Expiry</th><th>Action</th>
+        </tr>
+        {% for item in items %}
+        <tr {% if item.is_low_stock %} style="background-color: #ffe0e0;" {% endif %}>
+          
+            <td><a href="/inventory/{{ item.pk }}/">{{ item.name }}</a></td>
+            <td>{{ item.category_display }}</td>
+            <td>{{ item.quantity }} {{ item.get_unit_display }}</td>
+            <td>{{ item.reorder_level }}</td>
+            <td>{{ item.expiry_date | default:"N/A" }}</td>
+            <td><a href="/inventory/{{ item.pk }}/quantity/">Update Quantity</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">No items in inventory yet.</td></tr>
+        {% endfor %}
+        
+        </table>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Detail</title>
+</head>
+<body>
+    <h1>{{ item.name }}</h1>
+    <p><strong>Category:</strong>{{ item.category_display }}</p>
+    <p><strong>Quantity:</strong>{{ item.quantity }} {{ item.get_unit_display }}</p>
+    <p><strong>Reorder Level:</strong>{{ item.reorder_level }}</p>
+    <p><strong>Expiry Date:</strong>{{ item.expiry_date | default:"N/A" }}</p>
+    <p><strong>supplier:</strong>{{ item.supplier }}</p>
+    <p><strong>Last Updated:</strong>{{ item.last_updated }}</p>
+    <p><strong>Price per Unit:</strong>{{ item.price_per_unit  }}</p>
+    {% if item.is_low_stock %}
+        <p style="color: red;"><strong>Low Stock - reorder needed</strong></p>
+    {% endif %}
+    <a href="/inventory/{{ item.pk }}/quantity/">Update Quantity</a>|
+    <a href="/inventory/">Back</a>
+</body>
+</html>

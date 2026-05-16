@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Quantity</title>
+</head>
+<body>
+    <h1>Update Quantity - {{ item.name }}</h1>
+    <p>Current quantity: {{ item.quantity }} {{ item.get_unit_display }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <label>New quantity:</label>
+        <input type="number" name="quantity" value="{{ item.quantity }}" min="0">
+        <button type="submit">Update</button>
+    </form>
+    <a href="/inventory/">Back</a>
+</body>
+</html>
