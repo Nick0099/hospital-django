@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import prescription
+from .models import Prescription
 
-@admin.register(prescription)
+@admin.register(Prescription)
 class PrescriptionAdmin(admin.ModelAdmin):
     list_display = ['patient', 'doctor', 'medication', 'dosage', 'frequency', 'is_active']
     search_fields =['patient__name', 'doctor__name', 'medication__name']

@@ -1,28 +1,28 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import prescription
+from .models import Prescription
 from .forms import PrescriptionForm
 
 # Create your views here.
-def prescription_list(request):
-    prescriptions = prescription.objects.filter(is_active=True).select_related('patient', 'doctor', 'medication')
-    return render(request, 'prescriptions/prescription_list.html', {'prescriptions': prescriptions})
+def Prescription_list(request):
+    Prescriptions = Prescription.objects.filter(is_active=True).select_related('patient', 'doctor', 'medication')
+    return render(request, 'Prescriptions/Prescription_list.html', {'Prescriptions': Prescriptions})
 
-def add_prescription(request):
+def add_Prescription(request):
     if request.method == 'POST':
         form = PrescriptionForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('prescription_list')
+            return redirect('Prescription_list')
     else:
         form = PrescriptionForm()
-    return render(request, 'prescriptions/add_prescription.html', {'form': form})
+    return render(request, 'Prescriptions/add_Prescription.html', {'form': form})
 
-def prescription_detail(request, pk):
-    prescription = get_object_or_404(prescription, pk=pk)
-    return render(request, 'prescriptions/prescription_detail.html', {'prescription': prescription})
+def Prescription_detail(request, pk):
+    Prescription = get_object_or_404(Prescription, pk=pk)
+    return render(request, 'Prescriptions/Prescription_detail.html', {'Prescription': Prescription})
 
-def deactivate_prescription(request, pk):
-    prescription = get_object_or_404(prescription, pk=pk)
-    prescription.is_active = False
-    prescription.save()
-    return redirect('prescription_list')
+def deactivate_Prescription(request, pk):
+    Prescription = get_object_or_404(Prescription, pk=pk)
+    Prescription.is_active = False
+    Prescription.save()
+    return redirect('Prescription_list')

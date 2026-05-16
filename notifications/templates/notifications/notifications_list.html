@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <style>
+        .notification {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+        }
+        .notification.read {
+            background: #f0f0f0;
+        }
+        .notification.unread {
+            background: #e8f4ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Notifications</h1>
+    <a href="/notifications/read-all/">Mark all as read</a>
+    <br><br>
+    {% for n in notifications %}
+        <div class="notification {% if n.is_read %}read{% else %}unread{% endif %}">
+            <strong>{{ n.get_type_display }}</strong>
+            <span style="font-size:12px; color:#888; ">- {{ n.created_at|date:"M d, Y H:i"}}</span>
+            {% if not n.is_read %}
+             <a href="/notifications/{{ n.pk }}/read/" style="float:right;">Mark read</a>
+            {% endif %}
+            <p>{{ n.message }}</p>
+        </div>
+    {% empty %}
+        <p>No notifications yet. </p>
+    {% endfor %}
+    <br>
+    <a href="/dashboard/"> Back to Dashboard</a>
+</body>
+</html>

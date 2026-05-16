@@ -17,4 +17,5 @@ urlpatterns = [
     path('dashboard/doctor/',  patient_views.doctor_dashboard,   name='doctor_dashboard'),
     path('dashboard/patient/', patient_views.patient_dashboard,  name='patient_dashboard'),
     path('dashboard/admin/',   patient_views.admin_dashboard,    name='admin_dashboard'),
+    path('notifications/', include('notifications.urls')),
 ]

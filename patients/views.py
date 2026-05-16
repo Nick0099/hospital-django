@@ -45,7 +45,7 @@ def patient_dashboard(request):
     from appointments.models import Appointment
     from prescriptions.models import Prescription           # ← capital P
     try:
-        patient = Patient.objects.get(phone=request.user.username)
+        patient = Patient.objects.get(p_phone=request.user.username)
         appointments  = Appointment.objects.filter(patient=patient).order_by('-date')[:10]
         prescriptions = Prescription.objects.filter(patient=patient, is_active=True)
     except Patient.DoesNotExist:

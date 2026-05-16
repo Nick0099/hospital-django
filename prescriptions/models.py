@@ -5,7 +5,7 @@ from appointments.models import Appointment
 
 # Create your models here.
 
-class prescription(models.Model):
+class Prescription(models.Model):
     FREQUENCY_CHOICES = [
         ('Once', 'Once a day'),
         ('Twice', 'Twice a day'),
