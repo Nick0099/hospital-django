@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, Dr.{{ doctor.name }}</h1>
+    <a href="{% url 'logout' %}">Logout</a>
+    <h2>Your Upcoming Appointments</h2>
+    {% for apt in appointments %}
+        <p>{{ apt.patient }} - {{ apt.date }} at {{ apt.time }} - {{ apt.get_status_display }}</p>
+        {% empty %}
+        <p>No upcoming appointments.</p>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ patient.name }}</h1>
+    <a href="{% url 'logout' %}">Logout</a>
+    <h2>Your  Appointments</h2>
+    {% for apt in appointments %}
+        <p>{{ apt.doctor }} - {{ apt.date }} at {{ apt.time }} - {{ apt.get_status_display }}</p>
+        {% empty %}
+        <p>No appointments.</p>
+    {% endfor %}
+    <h2>Your Prescriptions</h2>
+    {% for p in prescriptions %}
+        <p>{{ p.medication }} - {{ p.dosage }} - {{p.get_frequency_display }}</p>
+        {% empty %}
+        <p>No active prescriptions.</p>
+    {% endfor %}
+</body>
+</html>
