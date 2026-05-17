@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hospital Management System{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .navbar-brand { font-weight: 700; font-size: 1.3rem; }
+        .sidebar { min-height: calc(100vh - 56px); background: #f8f9fa; border-right: 1px solid #dee2e6; }
+        .sidebar .nav-link { color: #495057; border-radius: 6px; margin-bottom: 2px; }
+        .sidebar .nav-link:hover { background: #e9ecef; color: #212529; }
+        .sidebar .nav-link.active { background: #0d6efd; color: white; }
+        .sidebar .nav-link i { width: 20px; }
+        .main-content { background: #f0f2f5; min-height: calc(100vh - 56px); }
+        .card { border: none; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+        .stat-card { border-radius: 12px; color: white; padding: 20px; }
+        .badge-notification { position: absolute; top: 0; right: 0; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard/">
+            <i class="bi bi-hospital"></i> HMS
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                {% if user.is_authenticated %}
+                    <li class="nav-item me-2">
+                        <a class="nav-link" href="/notifications/">
+                            <i class="bi bi-bell"></i> Notifications
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link text-white-50">
+                            <i class="bi bi-person-circle"></i> {{ user.username }}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="/logout/" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link btn btn-link text-white p-0">
+                             <i class="bi bi-box-arrow-right"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login/">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Page layout -->
+<div class="container-fluid p-0">
+    <div class="row g-0">
+
+        <!-- Sidebar -->
+        {% if user.is_authenticated %}
+        <div class="col-md-2 sidebar py-3 px-2">
+            <nav class="nav flex-column">
+                <a class="nav-link {% block nav_dashboard %}{% endblock %}" href="/dashboard/">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a class="nav-link {% block nav_patients %}{% endblock %}" href="/patients/">
+                    <i class="bi bi-people"></i> Patients
+                </a>
+                <a class="nav-link {% block nav_doctors %}{% endblock %}" href="/doctors/">
+                    <i class="bi bi-heart-pulse"></i> Doctors
+                </a>
+                <a class="nav-link {% block nav_appointments %}{% endblock %}" href="/appointments/">
+                    <i class="bi bi-calendar-check"></i> Appointments
+                </a>
+                <a class="nav-link {% block nav_prescriptions %}{% endblock %}" href="/prescriptions/">
+                    <i class="bi bi-capsule"></i> Prescriptions
+                </a>
+                <a class="nav-link {% block nav_inventory %}{% endblock %}" href="/inventory/">
+                    <i class="bi bi-box-seam"></i> Inventory
+                </a>
+                <a class="nav-link {% block nav_staff %}{% endblock %}" href="/staff/">
+                    <i class="bi bi-person-badge"></i> Staff
+                </a>
+            </nav>
+        </div>
+        {% endif %}
+
+        <!-- Main content -->
+        <div class="col-md-{% if user.is_authenticated %}10{% else %}12{% endif %} main-content p-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

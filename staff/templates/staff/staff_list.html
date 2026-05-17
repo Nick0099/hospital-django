@@ -6,15 +6,36 @@
     <title>staff</title>
 </head>
 <body>
-    <h1>Hospital Staff</h1>
-    {% for member in staff %}
-     <div>
-        <h3><a href="/staff/{{ member.pk }}/"> {{ member.name }}</h3>
-        <p>Role: {{member.get_role_display}}</p>
-        <p>Department: {{member.department}}</p>
-        <p>Shift: {{member.get_shift_display }}</p>
-     </div>
-     <hr>
-    {% endfor %}
+   {% extends 'base.html' %}
+{% block title %}Staff{% endblock %}
+{% block nav_staff %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Hospital Staff</h2>
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Name</th><th>Role</th><th>Department</th><th>Shift</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for member in staff %}
+                <tr>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.get_role_display }}</td>
+                    <td>{{ member.department }}</td>
+                    <td>{{ member.get_shift_display }}</td>
+                    <td><a href="/staff/{{ member.pk }}/" class="btn btn-sm btn-outline-primary">View</a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="text-muted p-3">No staff yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
 </body>
 </html>

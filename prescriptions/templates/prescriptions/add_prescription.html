@@ -5,13 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Prescriptions</title>
 </head>
-<body>
-    <h1> Add Prescription</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
-    <a href="/prescriptions/">Back</a>
+<body>{% extends 'base.html' %}
+{% block title %}New Prescription{% endblock %}
+{% block nav_prescriptions %}active{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="/prescriptions/" class="btn btn-outline-secondary btn-sm">← Back</a>
+</div>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="mb-4"><i class="bi bi-capsule"></i> Add Prescription</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-primary w-100 mt-2">Save Prescription</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 </body>
 </html>

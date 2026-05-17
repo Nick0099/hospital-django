@@ -6,15 +6,42 @@
     <title>Doctors</title>
 </head>
 <body>
-    <h1>Our Doctors</h1>
-    {% for doctor in doctors%}
-        <div>
-            <h3><a href="/doctors/{{doctor.pk}}/">Dr. {{doctor.name }}</a></h3>
-            <p>Specialty: {{ doctor.specialty.name }}</p>
-            <p> Shift :{{ doctor.get_shift_display }}</p>
-        </div>
-    {% empty %}
-        <p>No doctors available.</p>
-    {% endfor %}
+   {% extends 'base.html' %}
+{% block title %}Doctors{% endblock %}
+{% block nav_doctors %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Doctors</h2>
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Name</th><th>Specialty</th><th>Shift</th><th>Available</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for doctor in doctors %}
+                <tr>
+                    <td>{{ doctor.name }}</td>
+                    <td>{{ doctor.specialty }}</td>
+                    <td>{{ doctor.get_shift_display }}</td>
+                    <td>
+                        {% if doctor.is_available %}
+                            <span class="badge bg-success">Available</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Unavailable</span>
+                        {% endif %}
+                    </td>
+                    <td><a href="/doctors/{{ doctor.pk }}/" class="btn btn-sm btn-outline-primary">View</a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="text-muted p-3">No doctors yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
 </body>
 </html>

@@ -6,22 +6,49 @@
     <title>Admin Dashboard</title>
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
-    <a href="/logout">Logout</a>
-    <h2>Overview</h2>
-    <p>Total Patients: {{ total_patients }}</p>
-    <p>Total Doctors: {{ total_doctors }}</p>
-    <p>Total Appointments: {{ total_appointments }}</p>
-    {% if low_stock %}
-      <h2 style="color: red;">Low Stock Alerts</h2>
-      {% for item in low_stock %}
-        <p>{{ item.name }}: {{ item.quantity }} left</p>
-      {% endfor %}
-    {% endif %}
-    <br>
-    <a href="/patients/">Patients</a>|
-    <a href="/doctors/">Doctors</a>|
-    <a href="/appointments/">Appointments</a>|
-    <a href="/inventory/">Inventory</a>|
+   {% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Admin Dashboard</h2>
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card" style="background:#0d6efd;">
+            <div class="fs-2 fw-bold">{{ total_patients }}</div>
+            <div>Total Patients</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background:#198754;">
+            <div class="fs-2 fw-bold">{{ total_doctors }}</div>
+            <div>Total Doctors</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background:#6f42c1;">
+            <div class="fs-2 fw-bold">{{ total_appointments }}</div>
+            <div>Appointments</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background:#dc3545;">
+            <div class="fs-2 fw-bold">{{ low_stock|length }}</div>
+            <div>Low Stock Items</div>
+        </div>
+    </div>
+</div>
+
+{% if low_stock %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title text-danger"><i class="bi bi-exclamation-triangle"></i> Low Stock Alerts</h5>
+        {% for item in low_stock %}
+            <span class="badge bg-warning text-dark me-2">{{ item.name }} — {{ item.quantity }} left</span>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
 </body>
 </html>

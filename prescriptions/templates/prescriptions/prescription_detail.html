@@ -5,16 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prescription Detail</title>
 </head>
-<body>
-    <h1>{{ prescription.medications }}</h1>
-    <p><strong>Patient:</strong> {{ prescription.patient }}</p>
-    <p><strong>Doctor:</strong> {{ prescription.doctor }}</p>
-    <p><strong>Dosage:</strong> {{ prescription.dosage }}</p>
-    <p><strong>Frequency:</strong> {{ prescription.get_frequency_display }}</p>
-    <p><strong>From:</strong> {{ prescription.start_date }} - {{ prescription.end_date }}</p>
-    <p><strong>Instructions:</strong> {{ prescription.instructions }}</p>
-    <p><strong>Status:</strong> {% if prescription.is_active %}Active {% else %}Inactive{% endif %}</p>
-    <br>
-    <a href="/prescriptions/">Back to List</a> 
+<body>{% extends 'base.html' %}
+{% block title %}Prescription Detail{% endblock %}
+{% block nav_prescriptions %}active{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="/prescriptions/" class="btn btn-outline-secondary btn-sm">← Back</a>
+</div>
+<div class="card">
+    <div class="card-body">
+        <h3 class="mb-4"><i class="bi bi-capsule"></i> {{ prescription.medication }}</h3>
+        <table class="table table-borderless">
+            <tr><th>Patient</th><td>{{ prescription.patient }}</td></tr>
+            <tr><th>Doctor</th><td>Dr. {{ prescription.doctor }}</td></tr>
+            <tr><th>Dosage</th><td>{{ prescription.dosage }}</td></tr>
+            <tr><th>Frequency</th><td>{{ prescription.get_frequency_display }}</td></tr>
+            <tr><th>Start Date</th><td>{{ prescription.start_date }}</td></tr>
+            <tr><th>End Date</th><td>{{ prescription.end_date }}</td></tr>
+            <tr><th>Instructions</th><td>{{ prescription.instructions|default:"None" }}</td></tr>
+            <tr><th>Status</th><td>
+                {% if prescription.is_active %}
+                    <span class="badge bg-success">Active</span>
+                {% else %}
+                    <span class="badge bg-secondary">Inactive</span>
+                {% endif %}
+            </td></tr>
+        </table>
+        {% if prescription.is_active %}
+            <a href="/prescriptions/{{ prescription.pk }}/deactivate/" class="btn btn-outline-danger">Deactivate</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
 </body>
 </html>

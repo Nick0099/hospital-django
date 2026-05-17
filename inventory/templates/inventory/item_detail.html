@@ -5,19 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Item Detail</title>
 </head>
-<body>
-    <h1>{{ item.name }}</h1>
-    <p><strong>Category:</strong>{{ item.category_display }}</p>
-    <p><strong>Quantity:</strong>{{ item.quantity }} {{ item.get_unit_display }}</p>
-    <p><strong>Reorder Level:</strong>{{ item.reorder_level }}</p>
-    <p><strong>Expiry Date:</strong>{{ item.expiry_date | default:"N/A" }}</p>
-    <p><strong>supplier:</strong>{{ item.supplier }}</p>
-    <p><strong>Last Updated:</strong>{{ item.last_updated }}</p>
-    <p><strong>Price per Unit:</strong>{{ item.price_per_unit  }}</p>
-    {% if item.is_low_stock %}
-        <p style="color: red;"><strong>Low Stock - reorder needed</strong></p>
-    {% endif %}
-    <a href="/inventory/{{ item.pk }}/quantity/">Update Quantity</a>|
-    <a href="/inventory/">Back</a>
+<body>{% extends 'base.html' %}
+{% block title %}{{ item.name }}{% endblock %}
+{% block nav_inventory %}active{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="/inventory/" class="btn btn-outline-secondary btn-sm">← Back</a>
+</div>
+<div class="card">
+    <div class="card-body">
+        <h3 class="mb-4"><i class="bi bi-box-seam"></i> {{ item.name }}</h3>
+        {% if item.is_low_stock %}
+            <div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> Low stock — reorder needed</div>
+        {% endif %}
+        <table class="table table-borderless col-md-6">
+            <tr><th>Category</th><td>{{ item.get_category_display }}</td></tr>
+            <tr><th>Quantity</th><td>{{ item.quantity }} {{ item.get_unit_display }}</td></tr>
+            <tr><th>Reorder Level</th><td>{{ item.reorder_level }}</td></tr>
+            <tr><th>Price per unit</th><td>Rs. {{ item.price_per_unit }}</td></tr>
+            <tr><th>Expiry</th><td>{{ item.expiry_date|default:"N/A" }}</td></tr>
+            <tr><th>Supplier</th><td>{{ item.supplier }}</td></tr>
+            <tr><th>Last updated</th><td>{{ item.last_updated }}</td></tr>
+        </table>
+        <a href="/inventory/{{ item.pk }}/quantity/" class="btn btn-primary">Update Quantity</a>
+    </div>
+</div>
+{% endblock %}
 </body>
 </html>

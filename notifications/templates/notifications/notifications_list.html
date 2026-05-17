@@ -4,37 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifications</title>
-    <style>
-        .notification {
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 6px;
-        }
-        .notification.read {
-            background: #f0f0f0;
-        }
-        .notification.unread {
-            background: #e8f4ff;
-        }
-    </style>
 </head>
 <body>
-    <h1>Your Notifications</h1>
-    <a href="/notifications/read-all/">Mark all as read</a>
-    <br><br>
-    {% for n in notifications %}
-        <div class="notification {% if n.is_read %}read{% else %}unread{% endif %}">
-            <strong>{{ n.get_type_display }}</strong>
-            <span style="font-size:12px; color:#888; ">- {{ n.created_at|date:"M d, Y H:i"}}</span>
+{% extends 'base.html' %}
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Notifications</h2>
+    <a href="/notifications/read-all/" class="btn btn-outline-secondary btn-sm">Mark all as read</a>
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        {% for n in notifications %}
+        <div class="d-flex align-items-start p-3 border-bottom {% if not n.is_read %}bg-light{% endif %}">
+            <div class="me-3 mt-1">
+                {% if n.type == 'med_reminder' %}<i class="bi bi-capsule text-primary fs-5"></i>
+                {% elif n.type == 'refill' %}<i class="bi bi-arrow-repeat text-warning fs-5"></i>
+                {% elif n.type == 'appointment' %}<i class="bi bi-calendar-check text-success fs-5"></i>
+                {% else %}<i class="bi bi-bell text-secondary fs-5"></i>{% endif %}
+            </div>
+            <div class="flex-grow-1">
+                <div class="fw-semibold">{{ n.get_type_display }}</div>
+                <div class="text-muted small">{{ n.message }}</div>
+                <div class="text-muted" style="font-size:11px;">{{ n.created_at|date:"M d, Y H:i" }}</div>
+            </div>
             {% if not n.is_read %}
-             <a href="/notifications/{{ n.pk }}/read/" style="float:right;">Mark read</a>
+            <a href="/notifications/{{ n.pk }}/read/" class="btn btn-sm btn-outline-primary ms-2">Mark read</a>
+            {% else %}
+            <span class="badge bg-light text-muted ms-2">Read</span>
             {% endif %}
-            <p>{{ n.message }}</p>
         </div>
-    {% empty %}
-        <p>No notifications yet. </p>
-    {% endfor %}
-    <br>
-    <a href="/dashboard/"> Back to Dashboard</a>
+        {% empty %}
+        <div class="p-4 text-center text-muted">
+            <i class="bi bi-bell-slash fs-2"></i>
+            <p class="mt-2">No notifications yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}   
 </body>
 </html>

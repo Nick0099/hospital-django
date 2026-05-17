@@ -5,22 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prescriptions</title>
 </head>
-<body>
-    <h1>Active Prescriptions</h1>
-    <a href="{% url 'add_prescription' %}">+ New Prescriptions</a>
-    <br><br>
-    {% for p in prescriptions %}
-       <div>
-            <h3><a href="{% url 'prescription_detail' p.pk %}">{{ p.medications }}</a></h3>
-            <p>Patient: {{ p.patient }}</p>
-            <p>Doctor: Dr. {{ p.doctor }}</p>
-            <p>Dosage: {{ p.dosage }} - {{ p.get_frequency_display }}</p>
-            <p>{{ p.start_date }} to {{ p.end_date}}</p> 
-            <a href="{% url 'deactivate_prescription' p.pk %}">Mark as Inactive</a>
-        </div>
-        <hr>
-        {% empty %}
-        <p>No active prescriptions found.</p>
-    {% endfor %}
+<body>{% extends 'base.html' %}
+{% block title %}Prescriptions{% endblock %}
+{% block nav_prescriptions %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Active Prescriptions</h2>
+    <a href="/prescriptions/add/" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> New Prescription
+    </a>
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Patient</th><th>Doctor</th><th>Medication</th><th>Dosage</th><th>Frequency</th><th>Until</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for p in prescriptions %}
+                <tr>
+                    <td>{{ p.patient }}</td>
+                    <td>Dr. {{ p.doctor }}</td>
+                    <td>{{ p.medication }}</td>
+                    <td>{{ p.dosage }}</td>
+                    <td>{{ p.get_frequency_display }}</td>
+                    <td>{{ p.end_date }}</td>
+                    <td>
+                        <a href="/prescriptions/{{ p.pk }}/" class="btn btn-sm btn-outline-primary">View</a>
+                        <a href="/prescriptions/{{ p.pk }}/deactivate/" class="btn btn-sm btn-outline-danger">Deactivate</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="text-muted p-3">No active prescriptions.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
 </body>
 </html>
