@@ -1,3 +1,7 @@
+
+## 🌐 Live Demo
+**[https://hospital-django-dnk3.onrender.com](https://hospital-django-dnk3.onrender.com)**
+
 # 🏥 Hospital Management System
 
 A full-featured hospital management system built with Django. Manages patients, doctors, staff, appointments, prescriptions, inventory and notifications.
