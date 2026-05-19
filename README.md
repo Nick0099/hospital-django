@@ -95,12 +95,15 @@ Set up roles via `/admin/` under **Groups**:
 
 ---
 
+<<<<<<< HEAD
 ## 📸 Screenshots
 
 > Add screenshots here after deployment
 
 ---
 
+=======
+>>>>>>> 61bbd865d778ddb3add2634cd1ad4010b9b553af
 ## 🗺️ Roadmap
 
 - [x] Patient management
@@ -118,6 +121,10 @@ Set up roles via `/admin/` under **Groups**:
 ---
 
 ## 👨‍💻 Author
+<<<<<<< HEAD
+=======
+Nischal Neupane
+>>>>>>> 61bbd865d778ddb3add2634cd1ad4010b9b553af
 
 **Nischal** — [@Nick0099](https://github.com/Nick0099)
 
