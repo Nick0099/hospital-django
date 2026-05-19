@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'prescriptions',
     'inventory',
     'notifications',
+    'rest_framework',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +127,13 @@ STATIC_URL = 'static/'
 
 LOGIN_URL          = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+}

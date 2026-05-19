@@ -18,4 +18,5 @@ urlpatterns = [
     path('dashboard/patient/', patient_views.patient_dashboard,  name='patient_dashboard'),
     path('dashboard/admin/',   patient_views.admin_dashboard,    name='admin_dashboard'),
     path('notifications/', include('notifications.urls')),
+    path('api/', include('api.urls')),
 ]
