@@ -98,14 +98,6 @@ Set up roles via `/admin/` under **Groups**:
 | Superuser | Full admin access |
 
 ---
-
-<<<<<<< HEAD
-## 📸 Screenshots
-
-> Add screenshots here after deployment
-
----
-
 =======
 >>>>>>> 61bbd865d778ddb3add2634cd1ad4010b9b553af
 ## 🗺️ Roadmap
@@ -125,7 +117,7 @@ Set up roles via `/admin/` under **Groups**:
 ---
 
 ## 👨‍💻 Author
-<<<<<<< HEAD
+Nischal Neupane
 =======
 Nischal Neupane
 >>>>>>> 61bbd865d778ddb3add2634cd1ad4010b9b553af
