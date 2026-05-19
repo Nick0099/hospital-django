@@ -76,3 +76,6 @@ def admin_dashboard(request):
         'total_appointments': total_appointments,
         'low_stock':          low_stock,
     })
+
+def home(request):
+    return render(request, 'home.html')

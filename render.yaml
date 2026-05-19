@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: hospital-django
+    env: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate"
+    startCommand: "gunicorn hospital.wsgi"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.14.2"
