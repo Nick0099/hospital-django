@@ -1,25 +1,29 @@
+# 🏥 Hospital Management System
+
+A full-stack hospital management system built with Django, PostgreSQL and Django REST Framework.
+
+> Built from scratch as a learning project — first Django project, completed in one week.
 
 ## 🌐 Live Demo
 **[https://hospital-django-dnk3.onrender.com](https://hospital-django-dnk3.onrender.com)**
 
-# 🏥 Hospital Management System
-
-A full-featured hospital management system built with Django. Manages patients, doctors, staff, appointments, prescriptions, inventory and notifications.
-
-> Built as a learning project to master Django from scratch.
+## 📂 Source Code
+**[github.com/Nick0099/hospital-django](https://github.com/Nick0099/hospital-django)**
 
 ---
 
-## 🚀 Features
+## ✨ Features
 
-- **Patients** — register patients with blood group, contact, emergency info
-- **Doctors** — manage specialties, qualifications, shifts and prescribable medications
-- **Staff** — non-medical staff with roles and departments
-- **Appointments** — book, view and cancel appointments between patients and doctors
-- **Prescriptions** — prescribe medications with dosage, frequency and instructions
-- **Inventory** — track medicines and supplies with low stock alerts
-- **Notifications** — automatic medication reminders and refill alerts for patients
-- **Authentication** — role-based login for doctors, patients, staff and admins
+- 👤 **Patients** — registration, blood group, emergency contacts
+- 🩺 **Doctors** — specialties, qualifications, shifts, prescribable medications
+- 🏥 **Staff** — non-medical staff with roles and departments
+- 📅 **Appointments** — booking, cancellation, status tracking
+- 💊 **Prescriptions** — dosage, frequency, instructions, active/inactive
+- 📦 **Inventory** — medicines and supplies with low stock alerts
+- 🔔 **Notifications** — automatic medication reminders and refill alerts
+- 🔐 **Auth** — role-based login (doctor / patient / staff / admin dashboards)
+- 🌐 **REST API** — full DRF API with JWT auth, filtering, search, pagination
+- 📖 **Swagger** — interactive API docs at /api/docs/
 
 ---
 
@@ -28,10 +32,71 @@ A full-featured hospital management system built with Django. Manages patients, 
 | Layer | Technology |
 |---|---|
 | Backend | Python 3.14, Django 6.0 |
-| Database | SQLite (dev), PostgreSQL (prod) |
-| Frontend | Bootstrap 5, Bootstrap Icons |
-| Auth | Django built-in authentication |
-| Version Control | Git + GitHub |
+| API | Django REST Framework, JWT (simplejwt) |
+| Database | PostgreSQL (prod), SQLite (dev) |
+| Frontend | Bootstrap 5, Bootstrap Icons, Crispy Forms |
+| Testing | pytest, pytest-django (28 tests) |
+| DevOps | Docker, docker-compose, GitHub Actions CI/CD |
+| Deployment | Render, WhiteNoise, gunicorn |
+
+---
+
+## 🚀 Quick Start
+
+### Local development
+```bash
+git clone https://github.com/Nick0099/hospital-django.git
+cd hospital-django
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+### Docker
+```bash
+docker-compose up --build
+```
+
+Visit `http://127.0.0.1:8000`
+
+---
+
+## 🔐 User Roles
+
+Set up via `/admin/` under **Groups**:
+
+| Group | Access |
+|---|---|
+| `Doctors` | Appointments, prescriptions |
+| `Patients` | Own appointments, notifications |
+| `Staff` | Full management access |
+| Superuser | Everything + admin panel |
+
+---
+
+## 🌐 API Endpoints
+
+| Endpoint | Methods | Description |
+|---|---|---|
+| `/api/patients/` | GET, POST | List / create patients |
+| `/api/doctors/` | GET, POST | List / create doctors |
+| `/api/appointments/` | GET, POST | List / create appointments |
+| `/api/prescriptions/` | GET, POST | List / create prescriptions |
+| `/api/inventory/` | GET, POST | List / create inventory |
+| `/api/inventory/low-stock/` | GET | Low stock alert |
+| `/api/token/` | POST | Get JWT token |
+| `/api/docs/` | GET | Swagger UI |
+
+---
+
+## 🧪 Tests
+
+```bash
+pytest
+```
+
+28 tests covering models, views and API endpoints.
 
 ---
 
@@ -39,89 +104,22 @@ A full-featured hospital management system built with Django. Manages patients, 
 
 ```
 hospital/
-├── hospital/          # Project config (settings, urls)
+├── hospital/          # Project config
 ├── patients/          # Patient management
-├── doctors/           # Doctor profiles and specialties
+├── doctors/           # Doctor profiles
 ├── staff/             # Non-medical staff
 ├── appointments/      # Appointment booking
 ├── prescriptions/     # Prescription management
-├── inventory/         # Medicine and supply tracking
-├── notifications/     # Med reminders and alerts
-├── templates/         # Shared base template and dashboards
+├── inventory/         # Supply tracking
+├── notifications/     # Reminders and alerts
+├── api/               # REST API
+├── templates/         # Shared templates
 └── manage.py
 ```
 
 ---
 
-## ⚙️ Setup Instructions
-
-### 1. Clone the repo
-```bash
-git clone https://github.com/Nick0099/hospital-django.git
-cd hospital-django
-```
-
-### 2. Install dependencies
-```bash
-pip install django
-```
-
-### 3. Run migrations
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-### 4. Create a superuser
-```bash
-python manage.py createsuperuser
-```
-
-### 5. Run the server
-```bash
-python manage.py runserver
-```
-
-Visit `http://127.0.0.1:8000/login/`
-
----
-
-## 👤 User Roles
-
-Set up roles via `/admin/` under **Groups**:
-
-| Group | Access |
-|---|---|
-| `Doctors` | Doctor dashboard — view appointments, prescribe |
-| `Patients` | Patient dashboard — view appointments, prescriptions, notifications |
-| `Staff` | Staff dashboard — manage everything |
-| Superuser | Full admin access |
-
----
-=======
->>>>>>> 61bbd865d778ddb3add2634cd1ad4010b9b553af
-## 🗺️ Roadmap
-
-- [x] Patient management
-- [x] Doctor management
-- [x] Staff management
-- [x] Appointment booking
-- [x] Prescription system
-- [x] Inventory with low stock alerts
-- [x] Notification system
-- [x] Role-based authentication
-- [ ] REST API (Django REST Framework)
-- [ ] Deploy to Railway/Render
-- [ ] SMS notifications
-
----
-
 ## 👨‍💻 Author
-Nischal Neupane
-=======
-Nischal Neupane
->>>>>>> 61bbd865d778ddb3add2634cd1ad4010b9b553af
 
-**Nischal** — [@Nick0099](https://github.com/Nick0099)
-
-Built in May 2026 as part of a self-taught Django learning journey.
+**Nischal Neupane** — [@Nick0099](https://github.com/Nick0099)  
+Self-taught developer, Kathmandu Nepal 🇳🇵
