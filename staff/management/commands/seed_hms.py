@@ -25,6 +25,32 @@ class Command(BaseCommand):
         specialties = list(Specialty.objects.all())
         qualifications = list(Qualification.objects.all())
         medications = list(Medication.objects.all())
+      
+
+        departments = []
+        for name in ["Cardiology", "Neurology", "Emergency", "Pediatrics", "Radiology"]:
+            obj, _ = Department.objects.get_or_create(name=name)
+            departments.append(obj)
+
+        specialties = []
+        for name in ["Cardiology", "Neurology", "Pediatrics", "Orthopedics", "Radiology"]:
+            obj, _ = Specialty.objects.get_or_create(name=name)
+            specialties.append(obj)
+
+        qualifications = []
+        for name in ["MBBS", "MD", "MS", "FCPS"]:
+            obj, _ = Qualification.objects.get_or_create(name=name)
+            qualifications.append(obj)
+
+        medications = []
+        for name, cat in [
+            ("Paracetamol", "Painkiller"),
+            ("Ibuprofen", "Painkiller"),
+            ("Amoxicillin", "Antibiotic"),
+            ("Cetirizine", "Antihistamine"),
+        ]:
+            obj, _ = Medication.objects.get_or_create(name=name, category=cat)
+            medications.append(obj)
 
         # ---------------------------
         # PATIENTS
@@ -45,8 +71,9 @@ class Command(BaseCommand):
         Patient.objects.bulk_create(patients)
         patients = list(Patient.objects.all())
 
-        self.stdout.write(self.style.SUCCESS("Patients added"))# ---------------------------
-        # ENSURE MASTER DATA EXISTS
+        self.stdout.write(self.style.SUCCESS("Patients added"))
+        # ---------------------------
+        # MASTER DATA
         # ---------------------------
 
         if Specialty.objects.count() == 0:
@@ -82,10 +109,6 @@ class Command(BaseCommand):
 
             doc.qualifications.set(random.sample(qualifications, 2))
             doc.can_prescribe.set(random.sample(medications, 2))
-
-            doctors.append(doc)
-
-        self.stdout.write(self.style.SUCCESS("Doctors added"))
 
         # ---------------------------
         # STAFF
