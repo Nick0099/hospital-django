@@ -77,7 +77,7 @@ class Command(BaseCommand):
                 email=fake.unique.email(),
                 license_number=str(random.randint(10000,99999)),
                 shift=random.choice(["Morning","Afternoon","Night"]),
-                specialties = list(Specialty.objects.all()),
+                specialty=random.choice(specialties)
             )
 
             doc.qualifications.set(random.sample(qualifications, 2))
