@@ -46,6 +46,27 @@ class Command(BaseCommand):
         patients = list(Patient.objects.all())
 
         self.stdout.write(self.style.SUCCESS("Patients added"))
+        # ---------------------------
+        # MASTER DATA (IMPORTANT)
+        # ---------------------------
+
+        if Specialty.objects.count() == 0:
+            for name in ["Cardiology", "Neurology", "Pediatrics", "Orthopedics", "Radiology"]:
+                Specialty.objects.create(name=name)
+
+        if Qualification.objects.count() == 0:
+            for name in ["MBBS", "MD", "MS", "FCPS"]:
+                Qualification.objects.create(name=name)
+
+        if Medication.objects.count() == 0:
+            meds = [
+                ("Paracetamol", "Painkiller"),
+                ("Ibuprofen", "Painkiller"),
+                ("Amoxicillin", "Antibiotic"),
+                ("Cetirizine", "Antihistamine"),
+            ]
+            for name, cat in meds:
+                Medication.objects.create(name=name, category=cat)
 
         # ---------------------------
         # DOCTORS
@@ -58,7 +79,8 @@ class Command(BaseCommand):
                 email=fake.unique.email(),
                 license_number=str(random.randint(10000,99999)),
                 shift=random.choice(["Morning","Afternoon","Night"]),
-                specialty=random.choice(specialties)
+                specialties = list(Specialty.objects.all()),
+                specialties = specialties or [Specialty.objects.first()]
             )
 
             doc.qualifications.set(random.sample(qualifications, 2))
