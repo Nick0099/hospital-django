@@ -45,9 +45,8 @@ class Command(BaseCommand):
         Patient.objects.bulk_create(patients)
         patients = list(Patient.objects.all())
 
-        self.stdout.write(self.style.SUCCESS("Patients added"))
-        # ---------------------------
-        # MASTER DATA (IMPORTANT)
+        self.stdout.write(self.style.SUCCESS("Patients added"))# ---------------------------
+        # ENSURE MASTER DATA EXISTS
         # ---------------------------
 
         if Specialty.objects.count() == 0:
@@ -67,7 +66,6 @@ class Command(BaseCommand):
             ]
             for name, cat in meds:
                 Medication.objects.create(name=name, category=cat)
-
         # ---------------------------
         # DOCTORS
         # ---------------------------
