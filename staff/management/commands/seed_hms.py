@@ -80,7 +80,6 @@ class Command(BaseCommand):
                 license_number=str(random.randint(10000,99999)),
                 shift=random.choice(["Morning","Afternoon","Night"]),
                 specialties = list(Specialty.objects.all()),
-                specialties = specialties or [Specialty.objects.first()]
             )
 
             doc.qualifications.set(random.sample(qualifications, 2))
