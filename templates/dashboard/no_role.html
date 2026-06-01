@@ -1,25 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>No_account</title>
-</head>
-<body>
-   {% extends 'base.html' %}
-{% block title %}No Role Assigned{% endblock %}
+{% extends 'base.html' %}
+{% block title %}No Role Assigned — HMS{% endblock %}
+
+{% block extra_head %}
+<style>
+    .main-content {
+        background: linear-gradient(145deg, #dce9fb 0%, #c8daf5 50%, #d6eaf4 100%) !important;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .glass-slab {
+        background: rgba(255,255,255,0.52);
+        backdrop-filter: blur(28px) saturate(200%);
+        -webkit-backdrop-filter: blur(28px) saturate(200%);
+        border: 0.5px solid rgba(255,255,255,0.65);
+        box-shadow: 0 2px 0 rgba(255,255,255,0.75) inset, 0 12px 40px rgba(30,60,120,0.10);
+        border-radius: 22px;
+        padding: 3rem 2.5rem;
+        text-align: center;
+        max-width: 440px; width: 100%;
+    }
+    .btn-ios-ghost {
+        background: rgba(255,255,255,0.40) !important; color: #1c1c1e !important;
+        font-weight: 500; border: 0.5px solid rgba(0,0,0,0.13) !important;
+        border-radius: 11px !important; padding: 0.58rem 1.4rem; font-size: 0.88rem;
+        backdrop-filter: blur(10px); transition: background 0.15s, transform 0.1s;
+        text-decoration: none; display: inline-block; margin-top: 1rem;
+    }
+    .btn-ios-ghost:hover  { background: rgba(255,255,255,0.68) !important; color: #1c1c1e !important; }
+    .btn-ios-ghost:active { transform: scale(0.975); }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6 text-center">
-        <div class="card p-5">
-            <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
-            <h3>Account Not Set Up</h3>
-            <p class="text-muted">Your account hasn't been assigned a role yet. Please contact the hospital admin.</p>
-            <a href="/logout/" class="btn btn-outline-secondary mt-2">Logout</a>
-        </div>
+<div style="padding: 1rem;">
+    <div class="glass-slab">
+        <i class="bi bi-person-x" style="font-size:2.8rem; color:#8e8e93; display:block; margin-bottom:1rem;"></i>
+        <h2 style="font-family:-apple-system,BlinkMacSystemFont,sans-serif; font-size:1.3rem; font-weight:700; letter-spacing:-0.3px; color:#0a0a0a; margin-bottom:8px;">Account Not Set Up</h2>
+        <p style="font-size:0.9rem; color:#636366; line-height:1.55; margin:0;">Your account hasn't been assigned a role yet. Please contact the hospital administrator to get access.</p>
+        <a href="/logout/" class="btn-ios-ghost"><i class="bi bi-box-arrow-left me-1"></i> Log Out</a>
     </div>
 </div>
 {% endblock %}
-</body>
-</html>

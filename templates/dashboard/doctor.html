@@ -1,38 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Dashboard</title>
-</head>
-<body>
-    {% extends 'base.html' %}
-{% block title %}Doctor Dashboard{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Patient Dashboard — HMS{% endblock %}
 {% block nav_dashboard %}active{% endblock %}
 
+{% block extra_head %}
+<style>
+    .main-content { background: linear-gradient(145deg, #dce9fb 0%, #c8daf5 50%, #d6eaf4 100%) !important; }
+    .page-wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+
+    .page-heading {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+        font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; color: #0a0a0a; margin-bottom: 1.5rem;
+    }
+    .page-heading span { color: #636366; font-weight: 400; }
+
+    .glass-slab {
+        background: rgba(255,255,255,0.52);
+        backdrop-filter: blur(28px) saturate(200%);
+        -webkit-backdrop-filter: blur(28px) saturate(200%);
+        border: 0.5px solid rgba(255,255,255,0.65);
+        box-shadow: 0 2px 0 rgba(255,255,255,0.75) inset, 0 12px 40px rgba(30,60,120,0.10);
+        border-radius: 22px;
+        padding: 24px 28px;
+        height: 100%;
+    }
+    .slab-title {
+        font-size: 1rem; font-weight: 700; letter-spacing: -0.2px; color: #0a0a0a;
+        display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+    }
+
+    /* List rows */
+    .list-row {
+        padding: 11px 0;
+        border-bottom: 0.5px solid rgba(0,0,0,0.06);
+        font-size: 0.88rem; color: #1c1c1e;
+    }
+    .list-row:last-child { border-bottom: none; }
+    .list-row .meta { font-size: 0.78rem; color: #8e8e93; margin-top: 2px; }
+
+    /* Badges */
+    .badge-ios { display: inline-block; font-size: 0.74rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+    .badge-ios.scheduled { background: rgba(0,127,245,0.12); color: #0060c7; }
+    .badge-ios.completed  { background: rgba(25,135,84,0.12);  color: #0f6640; }
+    .badge-ios.cancelled  { background: rgba(220,53,69,0.12);  color: #b02a37; }
+
+    .empty-state { text-align: center; padding: 2rem 1rem; color: #8e8e93; font-size: 0.875rem; }
+    .empty-state i { font-size: 1.75rem; display: block; margin-bottom: 8px; opacity: 0.35; }
+</style>
+{% endblock %}
+
 {% block content %}
-<h2 class="mb-4">Welcome, Dr. {{ doctor.name }}</h2>
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title"><i class="bi bi-calendar-check"></i> Upcoming Appointments</h5>
-        <table class="table table-hover mt-3">
-            <thead><tr><th>Patient</th><th>Date</th><th>Time</th><th>Status</th><th>Reason</th></tr></thead>
-            <tbody>
+<div class="page-wrap">
+
+    <h1 class="page-heading">Welcome, <span>{{ patient.name }}</span></h1>
+
+    <div class="row g-3">
+
+        <!-- Appointments -->
+        <div class="col-md-6">
+            <div class="glass-slab">
+                <div class="slab-title">
+                    <i class="bi bi-calendar-check text-primary"></i> Your Appointments
+                </div>
                 {% for apt in appointments %}
-                <tr>
-                    <td>{{ apt.patient }}</td>
-                    <td>{{ apt.date }}</td>
-                    <td>{{ apt.time }}</td>
-                    <td><span class="badge bg-{% if apt.status == 'scheduled' %}primary{% elif apt.status == 'completed' %}success{% else %}danger{% endif %}">{{ apt.get_status_display }}</span></td>
-                    <td>{{ apt.reason }}</td>
-                </tr>
+                    <div class="list-row">
+                        <div><strong>Dr. {{ apt.doctor }}</strong>
+                            <span class="badge-ios {{ apt.status }} ms-2">{{ apt.get_status_display }}</span>
+                        </div>
+                        <div class="meta">{{ apt.date }} at {{ apt.time }}</div>
+                    </div>
                 {% empty %}
-                <tr><td colspan="5" class="text-muted">No appointments yet.</td></tr>
+                    <div class="empty-state">
+                        <i class="bi bi-calendar-x"></i> No appointments yet.
+                    </div>
                 {% endfor %}
-            </tbody>
-        </table>
+            </div>
+        </div>
+
+        <!-- Prescriptions -->
+        <div class="col-md-6">
+            <div class="glass-slab">
+                <div class="slab-title">
+                    <i class="bi bi-capsule text-success"></i> Active Prescriptions
+                </div>
+                {% for p in prescriptions %}
+                    <div class="list-row">
+                        <div><strong>{{ p.medication }}</strong> — {{ p.dosage }}</div>
+                        <div class="meta">{{ p.get_frequency_display }}</div>
+                    </div>
+                {% empty %}
+                    <div class="empty-state">
+                        <i class="bi bi-capsule"></i> No active prescriptions.
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}
-</body>
-</html>

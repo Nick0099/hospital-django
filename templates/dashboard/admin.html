@@ -1,54 +1,112 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-</head>
-<body>
-   {% extends 'base.html' %}
-{% block title %}Admin Dashboard{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard — HMS{% endblock %}
 {% block nav_dashboard %}active{% endblock %}
 
-{% block content %}
-<h2 class="mb-4">Admin Dashboard</h2>
-<div class="row g-3 mb-4">
-    <div class="col-md-3">
-        <div class="stat-card" style="background:#0d6efd;">
-            <div class="fs-2 fw-bold">{{ total_patients }}</div>
-            <div>Total Patients</div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stat-card" style="background:#198754;">
-            <div class="fs-2 fw-bold">{{ total_doctors }}</div>
-            <div>Total Doctors</div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stat-card" style="background:#6f42c1;">
-            <div class="fs-2 fw-bold">{{ total_appointments }}</div>
-            <div>Appointments</div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stat-card" style="background:#dc3545;">
-            <div class="fs-2 fw-bold">{{ low_stock|length }}</div>
-            <div>Low Stock Items</div>
-        </div>
-    </div>
-</div>
+{% block extra_head %}
+<style>
+    .main-content { background: linear-gradient(145deg, #dce9fb 0%, #c8daf5 50%, #d6eaf4 100%) !important; padding-top: 80px; }
 
-{% if low_stock %}
-<div class="card mb-4">
-    <div class="card-body">
-        <h5 class="card-title text-danger"><i class="bi bi-exclamation-triangle"></i> Low Stock Alerts</h5>
-        {% for item in low_stock %}
-            <span class="badge bg-warning text-dark me-2">{{ item.name }} — {{ item.quantity }} left</span>
-        {% endfor %}
-    </div>
-</div>
-{% endif %}
+    .page-wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+
+    .page-heading {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+        font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; color: #0a0a0a; margin-bottom: 1.5rem;
+    }
+
+    /* Stat cards */
+    .stat-glass {
+        background: rgba(255,255,255,0.50);
+        backdrop-filter: blur(22px) saturate(190%);
+        -webkit-backdrop-filter: blur(22px) saturate(190%);
+        border: 0.5px solid rgba(255,255,255,0.65);
+        box-shadow: 0 2px 0 rgba(255,255,255,0.72) inset, 0 8px 24px rgba(30,60,120,0.09);
+        border-radius: 18px;
+        padding: 20px 22px;
+        transition: transform 0.2s ease;
+    }
+    .stat-glass:hover { transform: translateY(-2px); }
+    .stat-value { font-size: 2.1rem; font-weight: 700; letter-spacing: -1px; line-height: 1; }
+    .stat-label { font-size: 0.8rem; font-weight: 500; margin-top: 5px; opacity: 0.6; }
+    .stat-icon  { font-size: 1.4rem; margin-bottom: 10px; opacity: 0.8; }
+
+    /* Alert slab */
+    .glass-slab {
+        background: rgba(255,255,255,0.52);
+        backdrop-filter: blur(28px) saturate(200%);
+        -webkit-backdrop-filter: blur(28px) saturate(200%);
+        border: 0.5px solid rgba(255,255,255,0.65);
+        box-shadow: 0 2px 0 rgba(255,255,255,0.75) inset, 0 12px 40px rgba(30,60,120,0.10);
+        border-radius: 22px;
+        padding: 22px 26px;
+    }
+    .slab-title {
+        font-size: 0.95rem; font-weight: 700; letter-spacing: -0.2px; color: #0a0a0a; margin-bottom: 12px;
+        display: flex; align-items: center; gap: 7px;
+    }
+
+    /* Low-stock badges */
+    .stock-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        background: rgba(255,193,7,0.16); border: 0.5px solid rgba(255,193,7,0.35);
+        color: #7d5a00; font-size: 0.8rem; font-weight: 600;
+        border-radius: 20px; padding: 4px 12px; margin: 3px 4px 3px 0;
+    }
+</style>
 {% endblock %}
-</body>
-</html>
+
+{% block content %}
+<div class="page-wrap">
+
+    <h1 class="page-heading">Admin Dashboard</h1>
+
+    <!-- Stat row -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stat-glass">
+                <div class="stat-icon text-primary"><i class="bi bi-people"></i></div>
+                <div class="stat-value text-primary">{{ total_patients }}</div>
+                <div class="stat-label">Total Patients</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-glass">
+                <div class="stat-icon text-success"><i class="bi bi-heart-pulse"></i></div>
+                <div class="stat-value text-success">{{ total_doctors }}</div>
+                <div class="stat-label">Total Doctors</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-glass">
+                <div class="stat-icon" style="color:#6f42c1;"><i class="bi bi-calendar-check"></i></div>
+                <div class="stat-value" style="color:#6f42c1;">{{ total_appointments }}</div>
+                <div class="stat-label">Appointments</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-glass">
+                <div class="stat-icon text-danger"><i class="bi bi-box-seam"></i></div>
+                <div class="stat-value text-danger">{{ low_stock|length }}</div>
+                <div class="stat-label">Low Stock Items</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Low stock alert -->
+    {% if low_stock %}
+    <div class="glass-slab">
+        <div class="slab-title">
+            <i class="bi bi-exclamation-triangle text-warning"></i>
+            Low Stock Alerts
+        </div>
+        <div>
+            {% for item in low_stock %}
+                <span class="stock-badge">
+                    <i class="bi bi-capsule"></i> {{ item.name }} — {{ item.quantity }} left
+                </span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

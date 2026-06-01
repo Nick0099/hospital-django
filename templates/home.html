@@ -1,52 +1,247 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% extends 'base.html' %}
-{% block title %}Hospital Management System{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Hospital Management System — Home{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ── Page background ── */
+    .main-content {
+        background: linear-gradient(145deg, #dce9fb 0%, #c8daf5 50%, #d6eaf4 100%) !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 1rem 2rem;
+    }
+
+    /* ── Outer scene wrapper — holds slab + floating side pills ── */
+    .hero-scene {
+        position: relative;
+        width: 100%;
+        max-width: 720px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* ── Frosted glass slab — clean, no feature grid inside ── */
+    .glass-card {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.52) !important;
+        backdrop-filter: blur(28px) saturate(200%) !important;
+        -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+        border: 0.5px solid rgba(255, 255, 255, 0.65) !important;
+        box-shadow:
+            0 2px 0 rgba(255,255,255,0.75) inset,
+            0 12px 40px rgba(30, 60, 120, 0.10) !important;
+        border-radius: 22px !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glass-card:hover {
+        transform: translateY(-3px);
+        box-shadow:
+            0 2px 0 rgba(255,255,255,0.75) inset,
+            0 20px 52px rgba(30, 60, 120, 0.15) !important;
+    }
+
+    /* ── Floating feature columns, one per side ── */
+    .feature-col {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        z-index: 1;
+    }
+
+    .feature-col.left  { right: calc(100% + 18px); align-items: flex-end; }
+    .feature-col.right { left:  calc(100% + 18px); align-items: flex-start; }
+
+    /* ── Individual floating pill ── */
+    .feature-pill {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.46);
+        backdrop-filter: blur(18px) saturate(180%);
+        -webkit-backdrop-filter: blur(18px) saturate(180%);
+        border: 0.5px solid rgba(255, 255, 255, 0.62);
+        box-shadow:
+            0 1.5px 0 rgba(255,255,255,0.8) inset,
+            0 6px 20px rgba(30, 60, 120, 0.08);
+        border-radius: 14px;
+        padding: 10px 14px;
+        white-space: nowrap;
+        transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+        cursor: default;
+    }
+
+    .feature-pill:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.72);
+        box-shadow:
+            0 1.5px 0 rgba(255,255,255,0.8) inset,
+            0 10px 28px rgba(30, 60, 120, 0.13);
+    }
+
+    /* Left pills — icon on right side of text */
+    .feature-col.left .feature-pill { flex-direction: row-reverse; }
+
+    .feature-pill-label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #1c1c1e;
+        letter-spacing: -0.1px;
+    }
+
+    .feature-pill .bi {
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    /* ── Title ── */
+    .card-title {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        color: #0a0a0a;
+    }
+
+    /* ── iOS-style primary button ── */
+    .btn-ios-primary {
+        background-color: #007ff5 !important;
+        color: #ffffff !important;
+        font-weight: 600;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        border: none;
+        border-radius: 12px !important;
+        padding: 0.72rem 2.2rem;
+        font-size: 1rem;
+        letter-spacing: -0.2px;
+        box-shadow: 0 4px 14px rgba(0, 127, 245, 0.35);
+        transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-ios-primary:hover {
+        background-color: #0072de !important;
+        box-shadow: 0 6px 18px rgba(0, 127, 245, 0.45);
+    }
+
+    .btn-ios-primary:active {
+        background-color: #0066c7 !important;
+        transform: scale(0.975);
+        box-shadow: 0 2px 8px rgba(0, 127, 245, 0.25);
+    }
+
+    /* ── Divider ── */
+    .glass-hr {
+        border: none;
+        border-top: 0.5px solid rgba(0, 0, 0, 0.07);
+        margin: 1.4rem 0 0;
+    }
+
+    /* ── Subtitle ── */
+    .card-subtitle {
+        color: #636366;
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.55;
+        max-width: 30rem;
+        margin: 0 auto;
+    }
+
+    /* ── Hide floating pills on narrow screens, show compact row instead ── */
+    .feature-col { display: flex; }
+    .feature-row-mobile { display: none; }
+
+    @media (max-width: 900px) {
+        .feature-col { display: none; }
+        .feature-row-mobile { display: flex; }
+        .glass-hr { margin: 1.4rem 0; }
+    }
+
+    /* ── Mobile compact row ── */
+    .feature-row-mobile {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding-top: 1rem;
+    }
+
+    .feature-pill-sm {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        background: rgba(255, 255, 255, 0.42);
+        border: 0.5px solid rgba(255, 255, 255, 0.6);
+        border-radius: 12px;
+        padding: 8px 13px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #1c1c1e;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-8 text-center">
-        <div class="card p-5">
-            <i class="bi bi-hospital fs-1 text-primary mb-3"></i>
-            <h1 class="mb-2">Hospital Management System</h1>
-            <p class="text-muted mb-4">Managing patients, doctors, appointments, prescriptions and inventory in one place.</p>
+<div class="d-flex justify-content-center w-100">
+    <div class="hero-scene">
 
-            {% if user.is_authenticated %}
-                <a href="/dashboard/" class="btn btn-primary btn-lg">Go to Dashboard</a>
-            {% else %}
-                <a href="/login/" class="btn btn-primary btn-lg me-2">Login</a>
-            {% endif %}
-
-            <hr class="my-4">
-
-            <div class="row text-center g-3 mt-2">
-                <div class="col-md-3">
-                    <i class="bi bi-people fs-2 text-primary"></i>
-                    <div class="fw-semibold mt-1">Patients</div>
-                </div>
-                <div class="col-md-3">
-                    <i class="bi bi-heart-pulse fs-2 text-success"></i>
-                    <div class="fw-semibold mt-1">Doctors</div>
-                </div>
-                <div class="col-md-3">
-                    <i class="bi bi-calendar-check fs-2 text-warning"></i>
-                    <div class="fw-semibold mt-1">Appointments</div>
-                </div>
-                <div class="col-md-3">
-                    <i class="bi bi-box-seam fs-2 text-danger"></i>
-                    <div class="fw-semibold mt-1">Inventory</div>
-                </div>
+        <!-- ── Left floating pills (Patients, Doctors) ── -->
+        <div class="feature-col left">
+            <div class="feature-pill">
+                <span class="feature-pill-label">Patients</span>
+                <i class="bi bi-people text-primary"></i>
+            </div>
+            <div class="feature-pill">
+                <span class="feature-pill-label">Doctors</span>
+                <i class="bi bi-heart-pulse text-success"></i>
             </div>
         </div>
+
+        <!-- ── Glass slab ── -->
+        <div class="card p-4 p-sm-5 glass-card text-center">
+            <i class="bi bi-hospital fs-1 text-primary mb-2"></i>
+
+            <h1 class="card-title mb-2">Hospital Management System</h1>
+            <p class="card-subtitle mb-4">
+                Managing patients, doctors, appointments, prescriptions, and inventory — all in one unified space.
+            </p>
+
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                {% if user.is_authenticated %}
+                    <a href="/dashboard/" class="btn btn-ios-primary">Go to Dashboard</a>
+                {% else %}
+                    <a href="/login/" class="btn btn-ios-primary">Login</a>
+                {% endif %}
+            </div>
+
+            <!-- Mobile-only compact pill row (hidden on wide screens) -->
+            <hr class="glass-hr">
+            <div class="feature-row-mobile">
+                <div class="feature-pill-sm"><i class="bi bi-people text-primary"></i> Patients</div>
+                <div class="feature-pill-sm"><i class="bi bi-heart-pulse text-success"></i> Doctors</div>
+                <div class="feature-pill-sm"><i class="bi bi-calendar-check text-warning"></i> Appointments</div>
+                <div class="feature-pill-sm"><i class="bi bi-box-seam text-danger"></i> Inventory</div>
+            </div>
+        </div>
+
+        <!-- ── Right floating pills (Appointments, Inventory) ── -->
+        <div class="feature-col right">
+            <div class="feature-pill">
+                <i class="bi bi-calendar-check text-warning"></i>
+                <span class="feature-pill-label">Appointments</span>
+            </div>
+            <div class="feature-pill">
+                <i class="bi bi-box-seam text-danger"></i>
+                <span class="feature-pill-label">Inventory</span>
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}
-    
-</body>
-</html>

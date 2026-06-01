@@ -4,112 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Hospital Management System{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
     <style>
-        .navbar-brand { font-weight: 700; font-size: 1.3rem; }
-        .sidebar { min-height: calc(100vh - 56px); background: #f8f9fa; border-right: 1px solid #dee2e6; }
-        .sidebar .nav-link { color: #495057; border-radius: 6px; margin-bottom: 2px; }
-        .sidebar .nav-link:hover { background: #e9ecef; color: #212529; }
-        .sidebar .nav-link.active { background: #0d6efd; color: white; }
-        .sidebar .nav-link i { width: 20px; }
-        .main-content { background: #f0f2f5; min-height: calc(100vh - 56px); }
-        .card { border: none; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-        .stat-card { border-radius: 12px; color: white; padding: 20px; }
-        .badge-notification { position: absolute; top: 0; right: 0; }
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Floating navbar wrapper — sits above page content */
+        .navbar-float-wrapper {
+            position: fixed;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 860px;
+            z-index: 1050;
+        }
+
+        /* Glossy frosted glass pill */
+        .navbar {
+            background: rgba(255, 255, 255, 0.60) !important;
+            backdrop-filter: blur(28px) saturate(210%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(210%) !important;
+            /* Top gloss highlight + subtle shadow */
+            box-shadow:
+                0 1.5px 0 rgba(255, 255, 255, 0.85) inset,
+                0 8px 32px rgba(0, 0, 0, 0.10),
+                0 1px 2px rgba(0, 0, 0, 0.06) !important;
+            border: 0.5px solid rgba(255, 255, 255, 0.75) !important;
+            border-radius: 18px !important;
+            height: 52px;
+            padding: 0 20px !important;
+        }
+
+        /* Main content area — offset so it starts below the floating bar */
+        .main-content {
+            min-height: 100vh;
+            padding-top: 80px; /* 14px top offset + 52px bar + breathing room */
+        }
     </style>
+
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/dashboard/">
-            <i class="bi bi-hospital"></i> HMS
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
+    <!-- Floating navbar -->
+    <div class="navbar-float-wrapper">
+        <nav class="navbar navbar-expand-md px-4">
+            <a class="navbar-brand fw-bold text-dark d-flex align-items-center gap-2" href="/">
+                <i class="bi bi-hospital text-primary"></i> HMS
+            </a>
+            <div class="ms-auto d-flex align-items-center gap-3">
                 {% if user.is_authenticated %}
-                    <li class="nav-item me-2">
-                        <a class="nav-link" href="/notifications/">
-                            <i class="bi bi-bell"></i> Notifications
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <span class="nav-link text-white-50">
-                            <i class="bi bi-person-circle"></i> {{ user.username }}
-                        </span>
-                    </li>
-                    <li class="nav-item">
-                        <form method="post" action="/logout/" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="nav-link btn btn-link text-white p-0">
-                             <i class="bi bi-box-arrow-right"></i> Logout
-                            </button>
-                        </form>
-                    </li>
+                    <span class="text-secondary" style="font-size: 0.875rem;">{{ user.username }}</span>
+                    <a href="/logout/" class="btn btn-sm" style="border: 0.5px solid rgba(0,0,0,0.15); border-radius: 10px; font-size: 0.85rem; padding: 4px 14px;">Log out</a>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login/">Login</a>
-                    </li>
+                    <a href="/login/" class="btn btn-sm" style="border: 0.5px solid rgba(0,0,0,0.15); border-radius: 10px; font-size: 0.85rem; padding: 4px 14px;">Log in</a>
                 {% endif %}
-            </ul>
-        </div>
+            </div>
+        </nav>
     </div>
-</nav>
 
-<!-- Page layout -->
-<div class="container-fluid p-0">
-    <div class="row g-0">
+    <!-- Page content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
 
-        <!-- Sidebar -->
-        {% if user.is_authenticated %}
-        <div class="col-md-2 sidebar py-3 px-2">
-            <nav class="nav flex-column">
-                <a class="nav-link {% block nav_dashboard %}{% endblock %}" href="/dashboard/">
-                    <i class="bi bi-speedometer2"></i> Dashboard
-                </a>
-                <a class="nav-link {% block nav_patients %}{% endblock %}" href="/patients/">
-                    <i class="bi bi-people"></i> Patients
-                </a>
-                <a class="nav-link {% block nav_doctors %}{% endblock %}" href="/doctors/">
-                    <i class="bi bi-heart-pulse"></i> Doctors
-                </a>
-                <a class="nav-link {% block nav_appointments %}{% endblock %}" href="/appointments/">
-                    <i class="bi bi-calendar-check"></i> Appointments
-                </a>
-                <a class="nav-link {% block nav_prescriptions %}{% endblock %}" href="/prescriptions/">
-                    <i class="bi bi-capsule"></i> Prescriptions
-                </a>
-                <a class="nav-link {% block nav_inventory %}{% endblock %}" href="/inventory/">
-                    <i class="bi bi-box-seam"></i> Inventory
-                </a>
-                <a class="nav-link {% block nav_staff %}{% endblock %}" href="/staff/">
-                    <i class="bi bi-person-badge"></i> Staff
-                </a>
-            </nav>
-        </div>
-        {% endif %}
-
-        <!-- Main content -->
-        <div class="col-md-{% if user.is_authenticated %}10{% else %}12{% endif %} main-content p-4">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-            {% block content %}{% endblock %}
-        </div>
-
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>
