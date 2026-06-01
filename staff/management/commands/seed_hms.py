@@ -3,7 +3,7 @@ from faker import Faker
 import random
 from datetime import timedelta
 
-from staff.models import Department, StaffMember
+from staff.models import Department, Staff
 from doctors.models import Doctor, Specialty, Qualification, Medication
 from patients.models import Patient
 from inventory.models import Supplier, InventoryItem
@@ -90,7 +90,7 @@ class Command(BaseCommand):
         # ---------------------------
         roles = ["nurse", "receptionist", "lab_tech", "pharmacist", "cleaner", "security", "accountant"]
         for _ in range(30):
-            StaffMember.objects.create(
+            Staff.objects.create(
                 name       = fake.name(),
                 phone      = "98" + ''.join(str(random.randint(0,9)) for _ in range(8)),
                 email      = fake.unique.email(),
