@@ -62,32 +62,40 @@
     <!-- Stat row -->
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">
-            <div class="stat-glass">
-                <div class="stat-icon text-primary"><i class="bi bi-people"></i></div>
-                <div class="stat-value text-primary">{{ total_patients }}</div>
-                <div class="stat-label">Total Patients</div>
-            </div>
+            <a href="{% url 'patient_list' %}" class="text-decoration-none">
+                <div class="stat-glass">
+                    <div class="stat-icon text-primary"><i class="bi bi-people"></i></div>
+                    <div class="stat-value text-primary">{{ total_patients }}</div>
+                    <div class="stat-label">Total Patients</div>
+                </div>
+            </a>
         </div>
         <div class="col-6 col-md-3">
-            <div class="stat-glass">
-                <div class="stat-icon text-success"><i class="bi bi-heart-pulse"></i></div>
-                <div class="stat-value text-success">{{ total_doctors }}</div>
-                <div class="stat-label">Total Doctors</div>
-            </div>
+            <a href="{% url 'doctor' %}" class="text-decoration-none">
+                <div class="stat-glass">
+                    <div class="stat-icon text-success"><i class="bi bi-heart-pulse"></i></div>
+                    <div class="stat-value text-success">{{ total_doctors }}</div>
+                    <div class="stat-label">Total Doctors</div>
+                </div>
+            </a>
         </div>
         <div class="col-6 col-md-3">
-            <div class="stat-glass">
-                <div class="stat-icon" style="color:#6f42c1;"><i class="bi bi-calendar-check"></i></div>
-                <div class="stat-value" style="color:#6f42c1;">{{ total_appointments }}</div>
-                <div class="stat-label">Appointments</div>
-            </div>
+            <a href="{% url 'appointment' %}" class="text-decoration-none">
+                <div class="stat-glass">
+                    <div class="stat-icon" style="color:#6f42c1;"><i class="bi bi-calendar-check"></i></div>
+                    <div class="stat-value" style="color:#6f42c1;">{{ total_appointments }}</div>
+                    <div class="stat-label">Appointments</div>
+                </div>
+            </a>
         </div>
         <div class="col-6 col-md-3">
-            <div class="stat-glass">
-                <div class="stat-icon text-danger"><i class="bi bi-box-seam"></i></div>
-                <div class="stat-value text-danger">{{ low_stock|length }}</div>
-                <div class="stat-label">Low Stock Items</div>
-            </div>
+            <a href="{% url 'inventory' %}" class="text-decoration-none">
+                <div class="stat-glass">
+                    <div class="stat-icon text-danger"><i class="bi bi-box-seam"></i></div>
+                    <div class="stat-value text-danger">{{ low_stock|length }}</div>
+                    <div class="stat-label">Low Stock Items</div>
+                </div>
+            </a>
         </div>
     </div>
 

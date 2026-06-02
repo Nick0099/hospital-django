@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Staff Dashboard — HMS{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+
+    <h1 class="page-heading">Staff Dashboard</h1>
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-6 col-md-3">
+            <a href="{% url 'patient_list' %}" class="text-decoration-none">
+                <div class="stat-glass">
+                    <div class="stat-icon text-primary"><i class="bi bi-people"></i></div>
+                    <div class="stat-value text-primary">{{ total_patients }}</div>
+                    <div class="stat-label">Patients</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <a href="{% url 'doctor' %}" class="text-decoration-none">
+                <div class="stat-glass">
+                    <div class="stat-icon text-success"><i class="bi bi-heart-pulse"></i></div>
+                    <div class="stat-value text-success">{{ total_doctors }}</div>
+                    <div class="stat-label">Doctors</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <a href="{% url 'appointment' %}" class="text-decoration-none">
+                <div class="stat-glass">
+                    <div class="stat-icon" style="color:#6f42c1;">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <div class="stat-value" style="color:#6f42c1;">{{ total_appointments }}</div>
+                    <div class="stat-label">Appointments</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <a href="{% url 'inventory' %}" class="text-decoration-none">
+                <div class="stat-glass">
+                    <div class="stat-icon text-danger"><i class="bi bi-box-seam"></i></div>
+                    <div class="stat-value text-danger">{{ low_stock|length }}</div>
+                    <div class="stat-label">Low Stock</div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Low stock -->
+    {% if low_stock %}
+    <div class="glass-slab">
+        <div class="slab-title">
+            <i class="bi bi-exclamation-triangle text-warning"></i>
+            Low Stock Alerts
+        </div>
+
+        {% for item in low_stock %}
+            <span class="stock-badge">
+                {{ item.name }} — {{ item.quantity }} left
+            </span>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
