@@ -7,7 +7,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, Sp
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('patients/', patient_views.patient_list),
+    path('patients/', patient_views.patient_list , name='patients'),
     path('doctors/', include('doctors.urls')),
     path('staff/', include('staff.urls')),
     path('appointments/', include('appointments.urls')),
