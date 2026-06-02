@@ -62,7 +62,7 @@
     <!-- Stat row -->
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">
-            <a href="{% url 'patient' %}" class="text-decoration-none">
+            <a href="{% url 'patients' %}" class="text-decoration-none">
                 <div class="stat-glass">
                     <div class="stat-icon text-primary"><i class="bi bi-people"></i></div>
                     <div class="stat-value text-primary">{{ total_patients }}</div>
@@ -71,7 +71,7 @@
             </a>
         </div>
         <div class="col-6 col-md-3">
-            <a href="{% url 'doctor' %}" class="text-decoration-none">
+            <a href="{% url 'doctors' %}" class="text-decoration-none">
                 <div class="stat-glass">
                     <div class="stat-icon text-success"><i class="bi bi-heart-pulse"></i></div>
                     <div class="stat-value text-success">{{ total_doctors }}</div>
@@ -80,7 +80,7 @@
             </a>
         </div>
         <div class="col-6 col-md-3">
-            <a href="{% url 'appointment' %}" class="text-decoration-none">
+            <a href="{% url 'appointments' %}" class="text-decoration-none">
                 <div class="stat-glass">
                     <div class="stat-icon" style="color:#6f42c1;"><i class="bi bi-calendar-check"></i></div>
                     <div class="stat-value" style="color:#6f42c1;">{{ total_appointments }}</div>
