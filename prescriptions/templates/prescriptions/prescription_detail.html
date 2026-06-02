@@ -1,42 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prescription Detail</title>
-</head>
-<body>{% extends 'base.html' %}
-{% block title %}Prescription Detail{% endblock %}
+{% extends 'base.html' %}
+{% block title %}{{ prescription.medication }} — HMS{% endblock %}
 {% block nav_prescriptions %}active{% endblock %}
 
+{% block extra_head %}
+<style>
+    .main-content { background: linear-gradient(145deg, #dce9fb 0%, #c8daf5 50%, #d6eaf4 100%) !important; }
+    .page-wrap { max-width: 620px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+    .glass-slab { background: rgba(255,255,255,0.52); backdrop-filter: blur(28px) saturate(200%); -webkit-backdrop-filter: blur(28px) saturate(200%); border: 0.5px solid rgba(255,255,255,0.65); box-shadow: 0 2px 0 rgba(255,255,255,0.75) inset, 0 12px 40px rgba(30,60,120,0.10); border-radius: 22px; padding: 28px 32px; }
+    .rx-header { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .rx-icon { width: 48px; height: 48px; border-radius: 14px; background: rgba(25,135,84,0.10); color: #0f6640; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+    .rx-name { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.4px; color: #0a0a0a; margin: 0 0 4px; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; }
+    .status-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .status-badge.active   { color: #0f6640; } .status-badge.active::before   { background: #1a9c5e; box-shadow: 0 0 0 2px rgba(25,156,94,0.2); }
+    .status-badge.inactive { color: #8e8e93; } .status-badge.inactive::before { background: #c7c7cc; }
+    .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-bottom: 0.5px solid rgba(0,0,0,0.05); font-size: 0.88rem; }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: #8e8e93; font-weight: 500; display: flex; align-items: center; gap: 7px; flex-shrink: 0; padding-right: 1rem; }
+    .detail-value { color: #1c1c1e; font-weight: 500; text-align: right; }
+    .freq-pill { display: inline-block; font-size: 0.78rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: rgba(25,135,84,0.10); color: #0f6640; }
+    .instructions-box { background: rgba(0,0,0,0.03); border: 0.5px solid rgba(0,0,0,0.07); border-radius: 10px; padding: 10px 12px; font-size: 0.87rem; color: #3a3a3c; line-height: 1.5; }
+    .glass-hr { border: none; border-top: 0.5px solid rgba(0,0,0,0.07); margin: 20px 0; }
+    .btn-deactivate { display: inline-flex; align-items: center; gap: 6px; background: rgba(220,53,69,0.09) !important; color: #b02a37 !important; font-weight: 600; border: 0.5px solid rgba(220,53,69,0.22) !important; border-radius: 12px !important; padding: 0.62rem 1.4rem; font-size: 0.88rem; text-decoration: none; transition: background 0.15s, transform 0.1s; }
+    .btn-deactivate:hover { background: rgba(220,53,69,0.16) !important; }
+    .btn-deactivate:active { transform: scale(0.975); }
+    .btn-ios-ghost { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.40) !important; color: #1c1c1e !important; font-weight: 500; border: 0.5px solid rgba(0,0,0,0.13) !important; border-radius: 10px !important; padding: 0.45rem 1rem; font-size: 0.83rem; text-decoration: none; backdrop-filter: blur(10px); transition: background 0.15s; margin-bottom: 1.25rem; }
+    .btn-ios-ghost:hover { background: rgba(255,255,255,0.65) !important; color: #1c1c1e !important; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="mb-3">
-    <a href="/prescriptions/" class="btn btn-outline-secondary btn-sm">← Back</a>
-</div>
-<div class="card">
-    <div class="card-body">
-        <h3 class="mb-4"><i class="bi bi-capsule"></i> {{ prescription.medication }}</h3>
-        <table class="table table-borderless">
-            <tr><th>Patient</th><td>{{ prescription.patient }}</td></tr>
-            <tr><th>Doctor</th><td>Dr. {{ prescription.doctor }}</td></tr>
-            <tr><th>Dosage</th><td>{{ prescription.dosage }}</td></tr>
-            <tr><th>Frequency</th><td>{{ prescription.get_frequency_display }}</td></tr>
-            <tr><th>Start Date</th><td>{{ prescription.start_date }}</td></tr>
-            <tr><th>End Date</th><td>{{ prescription.end_date }}</td></tr>
-            <tr><th>Instructions</th><td>{{ prescription.instructions|default:"None" }}</td></tr>
-            <tr><th>Status</th><td>
+<div class="page-wrap">
+    <a href="/prescriptions/" class="btn-ios-ghost"><i class="bi bi-chevron-left"></i> Back to Prescriptions</a>
+    <div class="glass-slab">
+        <div class="rx-header">
+            <div class="rx-icon"><i class="bi bi-capsule"></i></div>
+            <div>
+                <p class="rx-name">{{ prescription.medication }}</p>
                 {% if prescription.is_active %}
-                    <span class="badge bg-success">Active</span>
+                    <span class="status-badge active">Active</span>
                 {% else %}
-                    <span class="badge bg-secondary">Inactive</span>
+                    <span class="status-badge inactive">Inactive</span>
                 {% endif %}
-            </td></tr>
-        </table>
+            </div>
+        </div>
+        <div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-person"></i> Patient</span><span class="detail-value">{{ prescription.patient }}</span></div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-heart-pulse"></i> Doctor</span><span class="detail-value">Dr. {{ prescription.doctor }}</span></div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-prescription2"></i> Dosage</span><span class="detail-value">{{ prescription.dosage }}</span></div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-clock"></i> Frequency</span><span class="detail-value"><span class="freq-pill">{{ prescription.get_frequency_display }}</span></span></div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-calendar3"></i> Start Date</span><span class="detail-value" style="color:#8e8e93;">{{ prescription.start_date }}</span></div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-calendar-x"></i> End Date</span><span class="detail-value" style="color:#8e8e93;">{{ prescription.end_date }}</span></div>
+            {% if prescription.instructions %}
+            <div class="detail-row" style="align-items:flex-start;">
+                <span class="detail-label"><i class="bi bi-journal-text"></i> Instructions</span>
+                <span class="detail-value" style="max-width:65%;"><div class="instructions-box">{{ prescription.instructions }}</div></span>
+            </div>
+            {% endif %}
+        </div>
         {% if prescription.is_active %}
-            <a href="/prescriptions/{{ prescription.pk }}/deactivate/" class="btn btn-outline-danger">Deactivate</a>
+        <hr class="glass-hr">
+        <a href="/prescriptions/{{ prescription.pk }}/deactivate/" class="btn-deactivate">
+            <i class="bi bi-x-circle"></i> Deactivate Prescription
+        </a>
         {% endif %}
     </div>
 </div>
 {% endblock %}
-</body>
-</html>

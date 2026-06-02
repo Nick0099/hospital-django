@@ -1,39 +1,125 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ member.name}}</title>
-</head>
-<body>
-   {% extends 'base.html' %}
-{% block title %}{{ member.name }}{% endblock %}
+{% extends 'base.html' %}
+{% block title %}{{ member.name }} — HMS{% endblock %}
 {% block nav_staff %}active{% endblock %}
 
+{% block extra_head %}
+<style>
+    .main-content { background: linear-gradient(145deg, #dce9fb 0%, #c8daf5 50%, #d6eaf4 100%) !important; }
+    .page-wrap { max-width: 640px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+
+    .glass-slab {
+        background: rgba(255,255,255,0.52);
+        backdrop-filter: blur(28px) saturate(200%);
+        -webkit-backdrop-filter: blur(28px) saturate(200%);
+        border: 0.5px solid rgba(255,255,255,0.65);
+        box-shadow: 0 2px 0 rgba(255,255,255,0.75) inset, 0 12px 40px rgba(30,60,120,0.10);
+        border-radius: 22px;
+        padding: 28px 32px;
+    }
+
+    /* Profile header */
+    .profile-header {
+        display: flex; align-items: center; gap: 16px; margin-bottom: 22px;
+    }
+    .profile-avatar {
+        width: 54px; height: 54px; border-radius: 50%;
+        background: rgba(111,66,193,0.12);
+        color: #4a2d8a; font-size: 1.1rem; font-weight: 700;
+        display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .profile-name {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+        font-size: 1.25rem; font-weight: 700; letter-spacing: -0.4px; color: #0a0a0a; margin: 0 0 3px;
+    }
+    .profile-role {
+        font-size: 0.8rem; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+        background: rgba(111,66,193,0.10); color: #4a2d8a; display: inline-block;
+    }
+
+    /* Detail rows */
+    .detail-row {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 12px 0; border-bottom: 0.5px solid rgba(0,0,0,0.05);
+        font-size: 0.88rem;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: #8e8e93; font-weight: 500; display: flex; align-items: center; gap: 7px; }
+    .detail-label i { font-size: 0.95rem; opacity: 0.7; }
+    .detail-value { color: #1c1c1e; font-weight: 500; text-align: right; }
+
+    /* Status badge */
+    .status-badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 0.78rem; font-weight: 600;
+    }
+    .status-badge::before {
+        content: ''; width: 7px; height: 7px; border-radius: 50%;
+    }
+    .status-badge.active  { color: #0f6640; }
+    .status-badge.active::before  { background: #1a9c5e; box-shadow: 0 0 0 2px rgba(25,156,94,0.2); }
+    .status-badge.inactive { color: #8e8e93; }
+    .status-badge.inactive::before { background: #c7c7cc; }
+
+    .btn-ios-ghost {
+        display: inline-flex; align-items: center; gap: 5px;
+        background: rgba(255,255,255,0.40) !important; color: #1c1c1e !important;
+        font-weight: 500; border: 0.5px solid rgba(0,0,0,0.13) !important;
+        border-radius: 10px !important; padding: 0.45rem 1rem; font-size: 0.83rem;
+        text-decoration: none; backdrop-filter: blur(10px);
+        transition: background 0.15s; margin-bottom: 1.25rem;
+    }
+    .btn-ios-ghost:hover { background: rgba(255,255,255,0.65) !important; color: #1c1c1e !important; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="mb-3">
-    <a href="/staff/" class="btn btn-outline-secondary btn-sm">← Back to Staff</a>
-</div>
-<div class="card">
-    <div class="card-body">
-        <h3 class="mb-4"><i class="bi bi-person-badge"></i> {{ member.name }}</h3>
-        <table class="table table-borderless col-md-6">
-            <tr><th>Role</th><td>{{ member.get_role_display }}</td></tr>
-            <tr><th>Department</th><td>{{ member.department }}</td></tr>
-            <tr><th>Shift</th><td>{{ member.get_shift_display }}</td></tr>
-            <tr><th>Phone</th><td>{{ member.phone }}</td></tr>
-            <tr><th>Email</th><td>{{ member.email }}</td></tr>
-            <tr><th>Joined</th><td>{{ member.joined_date }}</td></tr>
-            <tr><th>Status</th><td>
-                {% if member.is_active %}
-                    <span class="badge bg-success">Active</span>
-                {% else %}
-                    <span class="badge bg-secondary">Inactive</span>
-                {% endif %}
-            </td></tr>
-        </table>
+<div class="page-wrap">
+
+    <a href="/staff/" class="btn-ios-ghost"><i class="bi bi-chevron-left"></i> Back to Staff</a>
+
+    <div class="glass-slab">
+
+        <div class="profile-header">
+            <div class="profile-avatar">{{ member.name|slice:":2"|upper }}</div>
+            <div>
+                <p class="profile-name">{{ member.name }}</p>
+                <span class="profile-role">{{ member.get_role_display }}</span>
+            </div>
+        </div>
+
+        <div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="bi bi-building"></i> Department</span>
+                <span class="detail-value">{{ member.department }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="bi bi-clock"></i> Shift</span>
+                <span class="detail-value">{{ member.get_shift_display }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="bi bi-telephone"></i> Phone</span>
+                <span class="detail-value">{{ member.phone }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="bi bi-envelope"></i> Email</span>
+                <span class="detail-value" style="color:#0060c7;">{{ member.email }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="bi bi-calendar3"></i> Joined</span>
+                <span class="detail-value" style="color:#8e8e93;">{{ member.joined_date }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Status</span>
+                <span class="detail-value">
+                    {% if member.is_active %}
+                        <span class="status-badge active">Active</span>
+                    {% else %}
+                        <span class="status-badge inactive">Inactive</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}
-</body>
-</html>

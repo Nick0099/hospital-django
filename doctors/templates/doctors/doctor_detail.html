@@ -1,56 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. {{ doctor.name }}</title>
-</head>
-<body>
-   {% extends 'base.html' %}
-{% block title %}Dr. {{ doctor.name }}{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Dr. {{ doctor.name }} — HMS{% endblock %}
 {% block nav_doctors %}active{% endblock %}
 
+{% block extra_head %}
+<style>
+    .main-content { background: linear-gradient(145deg, #dce9fb 0%, #c8daf5 50%, #d6eaf4 100%) !important; }
+    .page-wrap { max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+    .glass-slab { background: rgba(255,255,255,0.52); backdrop-filter: blur(28px) saturate(200%); -webkit-backdrop-filter: blur(28px) saturate(200%); border: 0.5px solid rgba(255,255,255,0.65); box-shadow: 0 2px 0 rgba(255,255,255,0.75) inset, 0 12px 40px rgba(30,60,120,0.10); border-radius: 22px; padding: 28px 32px; }
+    .profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+    .profile-avatar { width: 54px; height: 54px; border-radius: 50%; background: rgba(25,135,84,0.12); color: #0f6640; font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .profile-name { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.4px; color: #0a0a0a; margin: 0 0 4px; }
+    .specialty-pill { font-size: 0.8rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: rgba(0,127,245,0.10); color: #0060c7; display: inline-block; }
+    .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 0.5px solid rgba(0,0,0,0.05); font-size: 0.88rem; }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: #8e8e93; font-weight: 500; display: flex; align-items: center; gap: 7px; }
+    .detail-value { color: #1c1c1e; font-weight: 500; text-align: right; }
+    .avail-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; }
+    .avail-dot::before { content: ''; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .avail-dot.yes { color: #0f6640; } .avail-dot.yes::before { background: #1a9c5e; box-shadow: 0 0 0 2px rgba(25,156,94,0.2); }
+    .avail-dot.no  { color: #8e8e93; } .avail-dot.no::before  { background: #c7c7cc; }
+    .section-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #8e8e93; margin: 20px 0 10px; }
+    .tag-pill { display: inline-block; font-size: 0.78rem; font-weight: 600; padding: 4px 11px; border-radius: 20px; margin: 3px 4px 3px 0; }
+    .tag-blue   { background: rgba(0,127,245,0.10); color: #0060c7; }
+    .tag-green  { background: rgba(25,135,84,0.10);  color: #0f6640; }
+    .glass-hr { border: none; border-top: 0.5px solid rgba(0,0,0,0.07); margin: 18px 0; }
+    .btn-ios-ghost { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.40) !important; color: #1c1c1e !important; font-weight: 500; border: 0.5px solid rgba(0,0,0,0.13) !important; border-radius: 10px !important; padding: 0.45rem 1rem; font-size: 0.83rem; text-decoration: none; backdrop-filter: blur(10px); transition: background 0.15s; margin-bottom: 1.25rem; }
+    .btn-ios-ghost:hover { background: rgba(255,255,255,0.65) !important; color: #1c1c1e !important; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="mb-3">
-    <a href="/doctors/" class="btn btn-outline-secondary btn-sm">← Back to Doctors</a>
-</div>
-<div class="card">
-    <div class="card-body">
-        <h3 class="mb-4"><i class="bi bi-person-circle"></i> Dr. {{ doctor.name }}</h3>
-        <div class="row">
-            <div class="col-md-6">
-                <table class="table table-borderless">
-                    <tr><th>Specialty</th><td>{{ doctor.specialty }}</td></tr>
-                    <tr><th>License No.</th><td>{{ doctor.license_number }}</td></tr>
-                    <tr><th>Shift</th><td>{{ doctor.get_shift_display }}</td></tr>
-                    <tr><th>Phone</th><td>{{ doctor.phone }}</td></tr>
-                    <tr><th>Email</th><td>{{ doctor.email }}</td></tr>
-                    <tr><th>Status</th><td>
-                        {% if doctor.is_available %}
-                            <span class="badge bg-success">Available</span>
-                        {% else %}
-                            <span class="badge bg-secondary">Unavailable</span>
-                        {% endif %}
-                    </td></tr>
-                </table>
+<div class="page-wrap">
+    <a href="/doctors/" class="btn-ios-ghost"><i class="bi bi-chevron-left"></i> Back to Doctors</a>
+    <div class="glass-slab">
+        <div class="profile-header">
+            <div class="profile-avatar">{{ doctor.name|slice:":2"|upper }}</div>
+            <div>
+                <p class="profile-name">Dr. {{ doctor.name }}</p>
+                <span class="specialty-pill">{{ doctor.specialty }}</span>
             </div>
-            <div class="col-md-6">
-                <h5>Qualifications</h5>
-                {% for q in doctor.qualifications.all %}
-                    <span class="badge bg-primary me-1">{{ q.name }}</span>
-                {% empty %}
-                    <p class="text-muted">None listed.</p>
-                {% endfor %}
-                <h5 class="mt-3">Can Prescribe</h5>
-                {% for med in doctor.can_prescribe.all %}
-                    <span class="badge bg-success me-1 mb-1">{{ med.name }}</span>
-                {% empty %}
-                    <p class="text-muted">None listed.</p>
-                {% endfor %}
+        </div>
+        <div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-card-text"></i> License No.</span><span class="detail-value" style="font-family:monospace; font-size:0.85rem;">{{ doctor.license_number }}</span></div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-clock"></i> Shift</span><span class="detail-value">{{ doctor.get_shift_display }}</span></div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-telephone"></i> Phone</span><span class="detail-value">{{ doctor.phone }}</span></div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-envelope"></i> Email</span><span class="detail-value" style="color:#0060c7;">{{ doctor.email }}</span></div>
+            <div class="detail-row"><span class="detail-label"><i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Status</span>
+                <span class="detail-value">
+                    {% if doctor.is_available %}<span class="avail-dot yes">Available</span>{% else %}<span class="avail-dot no">Unavailable</span>{% endif %}
+                </span>
             </div>
+        </div>
+        <hr class="glass-hr">
+        <div class="section-label">Qualifications</div>
+        <div>
+            {% for q in doctor.qualifications.all %}<span class="tag-pill tag-blue">{{ q.name }}</span>{% empty %}<span style="font-size:0.85rem; color:#8e8e93;">None listed.</span>{% endfor %}
+        </div>
+        <div class="section-label" style="margin-top:16px;">Can Prescribe</div>
+        <div>
+            {% for med in doctor.can_prescribe.all %}<span class="tag-pill tag-green">{{ med.name }}</span>{% empty %}<span style="font-size:0.85rem; color:#8e8e93;">None listed.</span>{% endfor %}
         </div>
     </div>
 </div>
 {% endblock %}
-</body>
-</html>

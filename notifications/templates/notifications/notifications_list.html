@@ -1,48 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notifications</title>
-</head>
-<body>
 {% extends 'base.html' %}
-{% block title %}Notifications{% endblock %}
+{% block title %}Notifications — HMS{% endblock %}
+
+{% block extra_head %}
+<style>
+    .main-content { background: linear-gradient(145deg, #dce9fb 0%, #c8daf5 50%, #d6eaf4 100%) !important; }
+    .page-wrap { max-width: 680px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+    .page-heading { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; color: #0a0a0a; }
+    .btn-ios-ghost-sm { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.40) !important; color: #1c1c1e !important; font-weight: 500; border: 0.5px solid rgba(0,0,0,0.13) !important; border-radius: 10px !important; padding: 0.45rem 1rem; font-size: 0.83rem; text-decoration: none; backdrop-filter: blur(10px); transition: background 0.15s; }
+    .btn-ios-ghost-sm:hover { background: rgba(255,255,255,0.65) !important; color: #1c1c1e !important; }
+    .glass-slab { background: rgba(255,255,255,0.52); backdrop-filter: blur(28px) saturate(200%); -webkit-backdrop-filter: blur(28px) saturate(200%); border: 0.5px solid rgba(255,255,255,0.65); box-shadow: 0 2px 0 rgba(255,255,255,0.75) inset, 0 12px 40px rgba(30,60,120,0.10); border-radius: 22px; overflow: hidden; }
+
+    /* Notification row */
+    .notif-row { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; border-bottom: 0.5px solid rgba(0,0,0,0.05); transition: background 0.15s; }
+    .notif-row:last-child { border-bottom: none; }
+    .notif-row.unread { background: rgba(0,127,245,0.04); }
+    .notif-row:hover { background: rgba(255,255,255,0.50); }
+
+    /* Icon bubble */
+    .notif-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .notif-icon.med_reminder  { background: rgba(0,127,245,0.10);  color: #0060c7; }
+    .notif-icon.refill        { background: rgba(255,193,7,0.15);   color: #7d5a00; }
+    .notif-icon.appointment   { background: rgba(25,135,84,0.10);   color: #0f6640; }
+    .notif-icon.default       { background: rgba(0,0,0,0.06);       color: #636366; }
+
+    .notif-body { flex: 1; min-width: 0; }
+    .notif-type { font-size: 0.86rem; font-weight: 700; color: #1c1c1e; margin-bottom: 2px; }
+    .notif-message { font-size: 0.83rem; color: #636366; line-height: 1.45; }
+    .notif-time { font-size: 0.75rem; color: #aeaeb2; margin-top: 4px; }
+
+    /* Unread dot */
+    .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: #007ff5; flex-shrink: 0; margin-top: 6px; }
+
+    /* Mark read button */
+    .btn-mark-read { display: inline-flex; align-items: center; font-size: 0.74rem; font-weight: 600; background: rgba(0,127,245,0.10) !important; color: #0060c7 !important; border: 0.5px solid rgba(0,127,245,0.20) !important; border-radius: 8px !important; padding: 3px 10px; text-decoration: none; transition: background 0.15s; flex-shrink: 0; margin-top: 2px; }
+    .btn-mark-read:hover { background: rgba(0,127,245,0.18) !important; }
+
+    .read-chip { font-size: 0.73rem; font-weight: 600; color: #aeaeb2; flex-shrink: 0; margin-top: 4px; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 3.5rem 1rem; color: #8e8e93; font-size: 0.9rem; }
+    .empty-state i { font-size: 2.2rem; display: block; margin-bottom: 10px; opacity: 0.3; }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Notifications</h2>
-    <a href="/notifications/read-all/" class="btn btn-outline-secondary btn-sm">Mark all as read</a>
-</div>
-<div class="card">
-    <div class="card-body p-0">
+<div class="page-wrap">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="page-heading">Notifications</h1>
+        <a href="/notifications/read-all/" class="btn-ios-ghost-sm"><i class="bi bi-check2-all"></i> Mark all read</a>
+    </div>
+
+    <div class="glass-slab">
         {% for n in notifications %}
-        <div class="d-flex align-items-start p-3 border-bottom {% if not n.is_read %}bg-light{% endif %}">
-            <div class="me-3 mt-1">
-                {% if n.type == 'med_reminder' %}<i class="bi bi-capsule text-primary fs-5"></i>
-                {% elif n.type == 'refill' %}<i class="bi bi-arrow-repeat text-warning fs-5"></i>
-                {% elif n.type == 'appointment' %}<i class="bi bi-calendar-check text-success fs-5"></i>
-                {% else %}<i class="bi bi-bell text-secondary fs-5"></i>{% endif %}
+        <div class="notif-row {% if not n.is_read %}unread{% endif %}">
+            <div class="notif-icon {% if n.type == 'med_reminder' %}med_reminder{% elif n.type == 'refill' %}refill{% elif n.type == 'appointment' %}appointment{% else %}default{% endif %}">
+                {% if n.type == 'med_reminder' %}<i class="bi bi-capsule"></i>
+                {% elif n.type == 'refill' %}<i class="bi bi-arrow-repeat"></i>
+                {% elif n.type == 'appointment' %}<i class="bi bi-calendar-check"></i>
+                {% else %}<i class="bi bi-bell"></i>{% endif %}
             </div>
-            <div class="flex-grow-1">
-                <div class="fw-semibold">{{ n.get_type_display }}</div>
-                <div class="text-muted small">{{ n.message }}</div>
-                <div class="text-muted" style="font-size:11px;">{{ n.created_at|date:"M d, Y H:i" }}</div>
+            <div class="notif-body">
+                <div class="notif-type">{{ n.get_type_display }}</div>
+                <div class="notif-message">{{ n.message }}</div>
+                <div class="notif-time">{{ n.created_at|date:"M d, Y · H:i" }}</div>
             </div>
             {% if not n.is_read %}
-            <a href="/notifications/{{ n.pk }}/read/" class="btn btn-sm btn-outline-primary ms-2">Mark read</a>
+                <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+                    <div class="unread-dot"></div>
+                    <a href="/notifications/{{ n.pk }}/read/" class="btn-mark-read">Mark read</a>
+                </div>
             {% else %}
-            <span class="badge bg-light text-muted ms-2">Read</span>
+                <span class="read-chip">Read</span>
             {% endif %}
         </div>
         {% empty %}
-        <div class="p-4 text-center text-muted">
-            <i class="bi bi-bell-slash fs-2"></i>
-            <p class="mt-2">No notifications yet.</p>
+        <div class="empty-state">
+            <i class="bi bi-bell-slash"></i>
+            You're all caught up.
         </div>
         {% endfor %}
     </div>
 </div>
-{% endblock %}   
-</body>
-</html>
+{% endblock %}

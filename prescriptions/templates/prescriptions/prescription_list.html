@@ -1,48 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prescriptions</title>
-</head>
-<body>{% extends 'base.html' %}
-{% block title %}Prescriptions{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Prescriptions — HMS{% endblock %}
 {% block nav_prescriptions %}active{% endblock %}
 
+{% block extra_head %}
+<style>
+    .main-content { background: linear-gradient(145deg, #dce9fb 0%, #c8daf5 50%, #d6eaf4 100%) !important; }
+    .page-wrap { max-width: 1040px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+    .page-heading { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; color: #0a0a0a; }
+    .btn-ios-primary { background-color: #007ff5 !important; color: #fff !important; font-weight: 600; border: none; border-radius: 12px !important; padding: 0.58rem 1.2rem; font-size: 0.88rem; box-shadow: 0 4px 14px rgba(0,127,245,0.30); transition: background-color 0.15s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-ios-primary:hover { background-color: #0072de !important; color: #fff !important; }
+    .glass-slab { background: rgba(255,255,255,0.52); backdrop-filter: blur(28px) saturate(200%); -webkit-backdrop-filter: blur(28px) saturate(200%); border: 0.5px solid rgba(255,255,255,0.65); box-shadow: 0 2px 0 rgba(255,255,255,0.75) inset, 0 12px 40px rgba(30,60,120,0.10); border-radius: 22px; overflow: hidden; }
+    .glass-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.87rem; }
+    .glass-table thead th { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #8e8e93; padding: 14px 16px 12px; border-bottom: 0.5px solid rgba(0,0,0,0.08); background: rgba(255,255,255,0.30); white-space: nowrap; }
+    .glass-table tbody td { padding: 13px 16px; border-bottom: 0.5px solid rgba(0,0,0,0.05); color: #1c1c1e; vertical-align: middle; }
+    .glass-table tbody tr:last-child td { border-bottom: none; }
+    .glass-table tbody tr:hover td { background: rgba(255,255,255,0.42); }
+    .med-name { font-weight: 700; color: #1c1c1e; }
+    .freq-pill { display: inline-block; font-size: 0.73rem; font-weight: 600; padding: 3px 9px; border-radius: 20px; background: rgba(25,135,84,0.10); color: #0f6640; }
+    .date-text { color: #8e8e93; white-space: nowrap; }
+    .btn-ios-view { display: inline-flex; align-items: center; gap: 4px; background: rgba(0,127,245,0.10) !important; color: #0060c7 !important; font-size: 0.76rem; font-weight: 600; border: 0.5px solid rgba(0,127,245,0.20) !important; border-radius: 8px !important; padding: 4px 10px; text-decoration: none; transition: background 0.15s; white-space: nowrap; }
+    .btn-ios-view:hover { background: rgba(0,127,245,0.18) !important; }
+    .btn-deactivate { display: inline-flex; align-items: center; gap: 4px; background: rgba(220,53,69,0.09) !important; color: #b02a37 !important; font-size: 0.76rem; font-weight: 600; border: 0.5px solid rgba(220,53,69,0.20) !important; border-radius: 8px !important; padding: 4px 10px; text-decoration: none; transition: background 0.15s; white-space: nowrap; margin-left: 5px; }
+    .btn-deactivate:hover { background: rgba(220,53,69,0.16) !important; }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: #8e8e93; font-size: 0.9rem; }
+    .empty-state i { font-size: 2rem; display: block; margin-bottom: 8px; opacity: 0.35; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Active Prescriptions</h2>
-    <a href="/prescriptions/add/" class="btn btn-primary">
-        <i class="bi bi-plus-lg"></i> New Prescription
-    </a>
-</div>
-<div class="card">
-    <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-            <thead class="table-light">
-                <tr><th>Patient</th><th>Doctor</th><th>Medication</th><th>Dosage</th><th>Frequency</th><th>Until</th><th>Actions</th></tr>
-            </thead>
-            <tbody>
-                {% for p in prescriptions %}
-                <tr>
-                    <td>{{ p.patient }}</td>
-                    <td>Dr. {{ p.doctor }}</td>
-                    <td>{{ p.medication }}</td>
-                    <td>{{ p.dosage }}</td>
-                    <td>{{ p.get_frequency_display }}</td>
-                    <td>{{ p.end_date }}</td>
-                    <td>
-                        <a href="/prescriptions/{{ p.pk }}/" class="btn btn-sm btn-outline-primary">View</a>
-                        <a href="/prescriptions/{{ p.pk }}/deactivate/" class="btn btn-sm btn-outline-danger">Deactivate</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="7" class="text-muted p-3">No active prescriptions.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<div class="page-wrap">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="page-heading">Active Prescriptions</h1>
+        <a href="/prescriptions/add/" class="btn-ios-primary"><i class="bi bi-plus-lg"></i> New Prescription</a>
+    </div>
+    <div class="glass-slab">
+        {% if prescriptions %}
+        <div style="overflow-x:auto;">
+            <table class="glass-table">
+                <thead>
+                    <tr><th>Patient</th><th>Doctor</th><th>Medication</th><th>Dosage</th><th>Frequency</th><th>Until</th><th></th></tr>
+                </thead>
+                <tbody>
+                    {% for p in prescriptions %}
+                    <tr>
+                        <td><strong>{{ p.patient }}</strong></td>
+                        <td style="color:#636366;">Dr. {{ p.doctor }}</td>
+                        <td><span class="med-name">{{ p.medication }}</span></td>
+                        <td style="color:#636366;">{{ p.dosage }}</td>
+                        <td><span class="freq-pill">{{ p.get_frequency_display }}</span></td>
+                        <td><span class="date-text">{{ p.end_date }}</span></td>
+                        <td>
+                            <a href="/prescriptions/{{ p.pk }}/" class="btn-ios-view"><i class="bi bi-chevron-right"></i> View</a>
+                            <a href="/prescriptions/{{ p.pk }}/deactivate/" class="btn-deactivate"><i class="bi bi-x"></i> Deactivate</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state"><i class="bi bi-capsule"></i> No active prescriptions.</div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
-</body>
-</html>
