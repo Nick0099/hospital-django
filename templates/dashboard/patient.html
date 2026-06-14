@@ -22,11 +22,20 @@
         border-radius: 22px;
         padding: 24px 28px;
         height: 100%;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+    a.slab-link { text-decoration: none; display: block; height: 100%; }
+    a.slab-link:hover .glass-slab {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 0 rgba(255,255,255,0.75) inset, 0 16px 48px rgba(30,60,120,0.14);
+    }
+
     .slab-title {
         font-size: 1rem; font-weight: 700; letter-spacing: -0.2px; color: #0a0a0a;
-        display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+        display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
     }
+    .slab-title-left { display: flex; align-items: center; gap: 8px; }
+    .slab-title i.chevron { color: #aeaeb2; font-size: 0.9rem; }
 
     /* List rows */
     .list-row {
@@ -57,45 +66,47 @@
 
         <!-- Appointments -->
         <div class="col-md-6">
-            <a href="{% url 'appointment_list' %}" class="text-decoration-none">
-            <div class="glass-slab">
-                <div class="slab-title">
-                    <i class="bi bi-calendar-check text-primary"></i> Your Appointments
-                </div>
-                {% for apt in appointments %}
-                    <div class="list-row">
-                        <div><strong>Dr. {{ apt.doctor }}</strong>
-                            <span class="badge-ios {{ apt.status }} ms-2">{{ apt.get_status_display }}</span>
+            <a href="/appointments/" class="slab-link">
+                <div class="glass-slab">
+                    <div class="slab-title">
+                        <span class="slab-title-left"><i class="bi bi-calendar-check text-primary"></i> Your Appointments</span>
+                        <i class="bi bi-chevron-right chevron"></i>
+                    </div>
+                    {% for apt in appointments %}
+                        <div class="list-row">
+                            <div><strong>Dr. {{ apt.doctor }}</strong>
+                                <span class="badge-ios {{ apt.status }} ms-2">{{ apt.get_status_display }}</span>
+                            </div>
+                            <div class="meta">{{ apt.date }} at {{ apt.time }}</div>
                         </div>
-                        <div class="meta">{{ apt.date }} at {{ apt.time }}</div>
-                    </div>
-                {% empty %}
-                    <div class="empty-state">
-                        <i class="bi bi-calendar-x"></i> No appointments yet.
-                    </div>
-                {% endfor %}
-            </div>
+                    {% empty %}
+                        <div class="empty-state">
+                            <i class="bi bi-calendar-x"></i> No appointments yet.
+                        </div>
+                    {% endfor %}
+                </div>
             </a>
         </div>
 
         <!-- Prescriptions -->
         <div class="col-md-6">
-            <a href="{% url 'prescription_list.html' %}" class="text-decoration-none">
-            <div class="glass-slab">
-                <div class="slab-title">
-                    <i class="bi bi-capsule text-success"></i> Active Prescriptions
+            <a href="/prescriptions/" class="slab-link">
+                <div class="glass-slab">
+                    <div class="slab-title">
+                        <span class="slab-title-left"><i class="bi bi-capsule text-success"></i> Active Prescriptions</span>
+                        <i class="bi bi-chevron-right chevron"></i>
+                    </div>
+                    {% for p in prescriptions %}
+                        <div class="list-row">
+                            <div><strong>{{ p.medication }}</strong> — {{ p.dosage }}</div>
+                            <div class="meta">{{ p.get_frequency_display }}</div>
+                        </div>
+                    {% empty %}
+                        <div class="empty-state">
+                            <i class="bi bi-capsule"></i> No active prescriptions.
+                        </div>
+                    {% endfor %}
                 </div>
-                {% for p in prescriptions %}
-                    <div class="list-row">
-                        <div><strong>{{ p.medication }}</strong> — {{ p.dosage }}</div>
-                        <div class="meta">{{ p.get_frequency_display }}</div>
-                    </div>
-                {% empty %}
-                    <div class="empty-state">
-                        <i class="bi bi-capsule"></i> No active prescriptions.
-                    </div>
-                {% endfor %}
-            </div>
             </a>
         </div>
 
