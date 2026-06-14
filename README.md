@@ -75,6 +75,21 @@ Set up via `/admin/` under **Groups**:
 
 ---
 
+## 🔑 Demo Credentials
+
+You can test the live application at [hospital-django-dnk3.onrender.com](https://hospital-django-dnk3.onrender.com) using the following demo accounts:
+
+| Role          | Username       | Password    |
+|---------------|----------------|-------------|
+| Admin         | admin          | Django123   |
+| Doctor        | doctor         | Django123   |
+| Patient       | patient        | Django123   |
+| Receptionist  | receptionist   | Django123   |
+
+> ⚠️ These are demo accounts on a public demo instance — please don't store any real personal or sensitive data here.
+
+---
+
 ## 🌐 API Endpoints
 
 | Endpoint | Methods | Description |
